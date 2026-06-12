@@ -7,6 +7,7 @@
 - 学会 Prompt 工程核心技巧（CoT、结构化输出、function calling）
 - 能够使用 DeepSeek API 实现简单的 LLM 聊天应用
 - 了解基本的 API 调用封装思路
+- 初步建立错误处理和代码组织能力
 
 ## 本周资源
 
@@ -102,26 +103,96 @@ python test_chat.py
 
 ### Step 3: Prompt 技巧实践（结构化输出与 CoT）
 
-** 目标 **：掌握 CoT 和结构化输出的实际应用。
+** 目标 **：深入理解并实践 Prompt 工程中最常用的两种技巧，能够自己设计有效的 Prompt。
 
-1. 修改 `test_chat.py` 中的 `prompt` 部分，尝试不同的 Prompt 模板：
-   - 添加角色设定（You are a helpful assistant...)
-   - 使用 CoT：“Let’s think step by step...”
+** 详细操作 **：
 
-2. 重新运行脚本并测试不同 Prompt 的效果差异。
+1. **基础结构化输出练习**
+   - 打开 `test_chat.py`
+   - 将 `prompt` 替换为下面这个模板，测试不同问题：
+```python
+prompt = f"""You are a helpful assistant. Please answer the user's question in the following strict JSON format:
+{{"answer": "concise and accurate answer", "reasoning": "brief reasoning", "confidence": "high/medium/low"}}
 
-** 建议练习 **：
-- 让模型输出 JSON
-- 让模型先思考再回答
+User question: {message}"""
+```
+   - 测试问题示例：
+     - “说一下你的优点”
+     - “如何学习 Python?”
+     - “今天天气如何？”
+
+2. **CoT 思维链练习**
+   - 在 prompt 中添加“Let’s think step by step.”
+   - 尝试两种版本对比：
+     - 版本A：直接要求回答
+     - 版本B：先让模型思考再回答
+   - 观察哪种版本的结构化输出更准确。
+
+3. **自己设计 Prompt 练习**
+   - 设计一个让模型输出代码例子的 Prompt
+   - 设计一个让模型进行简单分类的 Prompt
+
+** 建议 **：每个 Prompt 至少测试 3 个不同问题，并在注释中记录你发现的差异。
 
 ---
 
 ### Step 4: 封装简单的 LLM 调用函数
 
-** 目标 **：学会基本的 API 封装思路，为后续 FastAPI 做准备。
+** 目标 **：学会基本的代码封装思路，为后续 FastAPI 做准备，并添加基本错误处理。
 
-1. 创建新文件 `llm_utils.py`，封装一个简单的调用函数。
-2. 将其引入到 `test_chat.py` 中使用。
+** 详细操作 **：
+
+1. 在 `ai-learning` 文件夹中新建一个文件 `llm_utils.py`，粘贴以下代码：
+```python
+import os
+from dotenv import load_dotenv
+from langchain_openai import ChatOpenAI
+
+load_dotenv()
+
+def get_llm():
+    return ChatOpenAI(
+        model="deepseek-chat",
+        api_key=os.getenv("DEEPSEEK_API_KEY"),
+        base_url="https://api.deepseek.com",
+        temperature=0.7,
+    )
+
+def call_llm(prompt: str) -> str:
+    llm = get_llm()
+    try:
+        response = llm.invoke(prompt)
+        return response.content
+    except Exception as e:
+        return f"Error: {str(e)}"
+```
+
+2. 修改 `test_chat.py`，引入并使用上面的函数：
+```python
+from llm_utils import call_llm
+
+def chat(message, history):
+    prompt = f"""Please answer in JSON format... User question: {message}"""
+    return call_llm(prompt)
+```
+
+3. 测试错误处理：
+   - 故意输入错误的 API Key 测试异常捕获
+   - 观察错误信息是否友好
+
+** 扩展练习 **：
+- 添加流式输出支持
+- 添加重试机制
+
+---
+
+### Step 5: 完整的简单应用封装（扩展）
+
+** 目标 **：将以上所学集成为一个可复用的模块。
+
+1. 创建 `app.py`，集成以上所有功能。
+2. 添加基本的对话历史记录功能。
+3. 测试完整流程并记录结果。
 
 ---
 
@@ -135,6 +206,7 @@ python test_chat.py
 - 掌握 Prompt 工程的基本方法（结构化输出、CoT）
 - 初步封装 LLM 调用逻辑
 - 了解 API 调用中常见的错误处理方式
+- 具备基本的代码组织和模块化能力
 
 ---
 
