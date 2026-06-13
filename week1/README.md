@@ -1,63 +1,92 @@
-# 第1周：Python 基础 + Prompt 工程 + DeepSeek API 实践
+# Week 1: Python Basics + Prompt Engineering + DeepSeek API Practice
 
-## 学习目标
+## Learning Objectives
 
-本周将帮助你：
-- 快速掌握 Python 异步编程、类型注解等基础知识
-- 学会 Prompt 工程核心技巧（CoT、结构化输出、function calling）
-- 能够使用 DeepSeek API 实现简单的 LLM 聊天应用
-- 了解基本的 API 调用封装思路
-- 初步建立错误处理和代码组织能力
+By the end of this week, you will be able to:
 
-## 本周资源
+- Quickly master Python asynchronous programming and type annotations
+- Understand and apply core Prompt Engineering techniques (CoT, structured output, function calling)
+- Use the DeepSeek API to build simple LLM-powered applications
+- Understand basic API calling and encapsulation patterns
+- Handle common errors in API calls
 
-- Datawhale 《动手学大模型应用开发》 Task 1-2
-- B站黑马程序员《2026 大模型应用开发》前 10 集
-- DeepSeek 官方文档
+## Resources for This Week
+
+- Datawhale: *Hands-on Large Model Application Development* (Task 1-2)
+- Bilibili: Black Horse Programmer 2026 LLM Application Development series (first 10 videos)
+- DeepSeek Official Documentation
 
 ---
 
-## 详细操作步骤
+## Detailed Steps
 
-### Step 1: 搭建 Python 虚拟环境并获取 DeepSeek API Key
+### Step 1: Set Up Python Virtual Environment and Obtain DeepSeek API Key
 
-** 目标 **：创建独立的学习环境，避免与其他项目冲突。
+**Objective**: Create an isolated learning environment and securely manage your API credentials.
 
-1. 打开终端，执行以下命令创建并激活环境：
+1. Open your terminal and create + activate the virtual environment:
+
 ```bash
 conda create -n llm-dev python=3.10 -y
 conda activate llm-dev
 ```
 
-   - 成功后终端前面会显示 `(llm-dev)`。
+   After successful activation, your terminal prompt should show `(llm-dev)`.
 
-2. 安装本周必要的基础库：
+2. Install the required packages for this week:
+
 ```bash
 pip install python-dotenv gradio langchain-openai
 ```
 
-3. 注册 DeepSeek API Key：
-   - 访问 https://platform.deepseek.com/api_keys
-   - 登录并点击创建新的 API Key
-   - 复制 Key（以 `sk-` 开头）
+3. Obtain your DeepSeek API Key:
+   - Visit: https://platform.deepseek.com/api_keys
+   - Log in and create a new API Key
+   - Copy the key (starts with `sk-`)
 
-4. 在本地新建文件夹 `ai-learning`（建议放在 Desktop 或 Documents）。
+4. Create a project folder (recommended location: Desktop or Documents):
 
-5. 在该文件夹中新建一个名为 `.env` 的文件（注意前面有一个点），用文本编辑器打开并粘贴以下内容：
-```env
-DEEPSEEK_API_KEY=sk-你的DeepSeek API Key
+```bash
+mkdir ai-learning
+cd ai-learning
 ```
-   - 保存文件。
 
-** 验证 **：在终端中输入 `echo $DEEPSEEK_API_KEY` （Mac/Linux）或 `echo %DEEPSEEK_API_KEY%` （Windows），能看到 key 即为成功。
+5. Create a `.env` file in the `ai-learning` folder.
+
+   **Important**: The filename must start with a dot (`.`). Use any text editor (VS Code, Notepad++, etc.) and paste the following content:
+
+```env
+DEEPSEEK_API_KEY=sk-your-actual-deepseek-api-key-here
+```
+
+   Save the file.
+
+**How to Verify the `.env` File**
+
+The `.env` file is **not** automatically loaded into your shell environment. It is designed to be read by Python applications using the `python-dotenv` library.
+
+**Correct verification methods**:
+
+- Check file content:
+  ```bash
+  cat .env
+  ```
+
+- Verify inside Python (recommended):
+  ```bash
+  python -c "from dotenv import load_dotenv; import os; load_dotenv(); print('Key loaded:', bool(os.getenv('DEEPSEEK_API_KEY'))); print('Key starts with:', os.getenv('DEEPSEEK_API_KEY')[:10] if os.getenv('DEEPSEEK_API_KEY') else 'Not found')"
+  ```
+
+If the output shows `Key loaded: True`, the setup is successful.
 
 ---
 
-### Step 2: 创建并运行第一个结构化输出聊天脚本
+### Step 2: Create and Run Your First Structured Output Chat Application
 
-** 目标 **：验证 API 调用是否正常，并实现简单的结构化输出功能。
+**Objective**: Verify that the API call works and implement basic structured output.
 
-1. 在 `ai-learning` 文件夹中新建一个 Python 文件 `test_chat.py`，粘贴以下代码：
+1. In the `ai-learning` folder, create a new file named `test_chat.py` and paste the following code:
+
 ```python
 import os
 from dotenv import load_dotenv
@@ -86,63 +115,65 @@ demo = gr.ChatInterface(chat, title="DeepSeek Structured Chat Demo")
 demo.launch()
 ```
 
-2. 在终端中运行：
+2. Run the script in the terminal:
+
 ```bash
 python test_chat.py
 ```
 
-3. 浏览器会自动打开一个网页界面。
-   - 输入任意问题测试
-   - 观察输出是否为 JSON 格式
+3. A browser window should open automatically. Test by entering questions and observe whether the output is in valid JSON format.
 
-** 常见问题解决 **：
-- API Key 错误：检查 `.env` 文件是否正确保存
-- 模型不存在：确认使用 `"deepseek-chat"`
+**Common Issues & Solutions**:
+- **API Key error**: Double-check that the key in `.env` is correct and that `load_dotenv()` is called.
+- **Model not found**: Confirm you are using `"deepseek-chat"`.
 
 ---
 
-### Step 3: Prompt 技巧实践（结构化输出与 CoT）
+### Step 3: Prompt Engineering Practice (Structured Output + Chain-of-Thought)
 
-** 目标 **：深入理解并实践 Prompt 工程中最常用的两种技巧，能够自己设计有效的 Prompt。
+**Objective**: Deeply understand and practice the two most important Prompt Engineering techniques.
 
-** 详细操作 **：
+**Detailed Exercises**:
 
-1. **基础结构化输出练习**
-   - 打开 `test_chat.py`
-   - 将 `prompt` 替换为下面这个模板，测试不同问题：
+1. **Structured Output Practice**
+   - Open `test_chat.py`
+   - Replace the `prompt` section with this improved template:
+
 ```python
 prompt = f"""You are a helpful assistant. Please answer the user's question in the following strict JSON format:
 {{"answer": "concise and accurate answer", "reasoning": "brief reasoning", "confidence": "high/medium/low"}}
 
 User question: {message}"""
 ```
-   - 测试问题示例：
-     - “说一下你的优点”
-     - “如何学习 Python?”
-     - “今天天气如何？”
 
-2. **CoT 思维链练习**
-   - 在 prompt 中添加“Let’s think step by step.”
-   - 尝试两种版本对比：
-     - 版本A：直接要求回答
-     - 版本B：先让模型思考再回答
-   - 观察哪种版本的结构化输出更准确。
+   - Test with different questions, for example:
+     - "What are your advantages?"
+     - "How to learn Python effectively?"
+     - "What is the weather like today?"
 
-3. **自己设计 Prompt 练习**
-   - 设计一个让模型输出代码例子的 Prompt
-   - 设计一个让模型进行简单分类的 Prompt
+2. **Chain-of-Thought (CoT) Practice**
+   - Add "Let's think step by step." to your prompt.
+   - Compare two versions:
+     - Version A: Direct answer request
+     - Version B: Require reasoning before answering
+   - Observe which version produces better structured output.
 
-** 建议 **：每个 Prompt 至少测试 3 个不同问题，并在注释中记录你发现的差异。
+3. **Design Your Own Prompts**
+   - Create a prompt that makes the model output code examples.
+   - Create a prompt that makes the model perform simple classification.
+
+**Recommendation**: Test each prompt with at least 3 different questions and record your observations.
 
 ---
 
-### Step 4: 封装简单的 LLM 调用函数
+### Step 4: Encapsulate LLM Calling Functions
 
-** 目标 **：学会基本的代码封装思路，为后续 FastAPI 做准备，并添加基本错误处理。
+**Objective**: Learn basic code encapsulation patterns and prepare for future FastAPI development. Add basic error handling.
 
-** 详细操作 **：
+**Detailed Steps**:
 
-1. 在 `ai-learning` 文件夹中新建一个文件 `llm_utils.py`，粘贴以下代码：
+1. Create a new file `llm_utils.py` in the `ai-learning` folder and paste the following code:
+
 ```python
 import os
 from dotenv import load_dotenv
@@ -151,6 +182,7 @@ from langchain_openai import ChatOpenAI
 load_dotenv()
 
 def get_llm():
+    """Return a configured LLM instance."""
     return ChatOpenAI(
         model="deepseek-chat",
         api_key=os.getenv("DEEPSEEK_API_KEY"),
@@ -159,15 +191,17 @@ def get_llm():
     )
 
 def call_llm(prompt: str) -> str:
+    """Call the LLM with basic error handling."""
     llm = get_llm()
     try:
         response = llm.invoke(prompt)
         return response.content
     except Exception as e:
-        return f"Error: {str(e)}"
+        return f"Error occurred: {str(e)}"
 ```
 
-2. 修改 `test_chat.py`，引入并使用上面的函数：
+2. Modify `test_chat.py` to use the encapsulated function:
+
 ```python
 from llm_utils import call_llm
 
@@ -176,40 +210,39 @@ def chat(message, history):
     return call_llm(prompt)
 ```
 
-3. 测试错误处理：
-   - 故意输入错误的 API Key 测试异常捕获
-   - 观察错误信息是否友好
+3. Test error handling:
+   - Temporarily put an incorrect API key in `.env` and observe the error message.
+   - Restore the correct key afterward.
 
-** 扩展练习 **：
-- 添加流式输出支持
-- 添加重试机制
-
----
-
-### Step 5: 完整的简单应用封装（扩展）
-
-** 目标 **：将以上所学集成为一个可复用的模块。
-
-1. 创建 `app.py`，集成以上所有功能。
-2. 添加基本的对话历史记录功能。
-3. 测试完整流程并记录结果。
+**Extension Exercise**:
+- Add retry logic
+- Add support for streaming output
 
 ---
 
-## 本周完成后将掌握的内容
+### Step 5: Integrate Everything into a Complete Simple Application
 
-完成第1周后，你将能够：
+**Objective**: Combine all components learned this week into a reusable module.
 
-- 独立创建和管理 Python 虚拟环境
-- 正确调用 DeepSeek API 并处理 API Key
-- 使用 Gradio 快速构建简单的聊天界面
-- 掌握 Prompt 工程的基本方法（结构化输出、CoT）
-- 初步封装 LLM 调用逻辑
-- 了解 API 调用中常见的错误处理方式
-- 具备基本的代码组织和模块化能力
+1. Create `app.py` that integrates all previous functionality.
+2. Add basic conversation history support.
+3. Test the complete workflow and document your results.
 
 ---
 
-** 说明 **：
-本文档会随着学习进度持续更新。
-每完成一个 Step 后，建议在本文件末尾添加自己的心得或问题解决记录。
+## Learning Outcomes After Completing Week 1
+
+After finishing this week, you will be able to:
+
+- Independently create and manage Python virtual environments
+- Correctly call the DeepSeek API and manage API keys
+- Quickly build simple chat interfaces using Gradio
+- Apply core Prompt Engineering techniques (structured output, Chain-of-Thought)
+- Encapsulate LLM calling logic with basic error handling
+- Organize code into reusable modules
+
+---
+
+**Notes**:
+
+This document will be continuously updated as learning progresses. After completing each step, you are encouraged to add your own notes, observations, or solutions to problems at the end of this file.
