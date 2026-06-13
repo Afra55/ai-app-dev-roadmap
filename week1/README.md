@@ -84,10 +84,6 @@ DEEPSEEK_API_KEY=sk-你的 DeepSeek API Key
 3. **Gradio 创建网页界面** (`gr.ChatInterface`)：快速生成一个简单的聊天 Web UI。
 4. **强制 JSON 输出** (在 Prompt 中)：通过 Prompt 让模型回答时严格按照 JSON 格式输出。
 
-** 为什么会出现网页？**
-
-`demo.launch()` 会启动一个简易的 Web 服务器，并自动打开浏览器。这是 Gradio 提供的功能，用来快速测试聊天应用。
-
 ** 为什义返回的是 JSON？**
 
 我们在 `prompt` 里面明确要求严格按照 JSON 格式回答。这是 Prompt 工程的一种常见技巧，叫做 **Structured Output**。
@@ -137,7 +133,7 @@ python test_chat.py
 
 ### Step 3: Prompt 技巧实践（结构化输出与 CoT）
 
-** 目标 **：深入理解并实践 Prompt 工程中最重要的两种技巧。
+** 目标 **：深入理解并实践 Prompt 工程中最重要的个两种技巧。
 
 ### 1. 结构化输出练习
 
@@ -166,7 +162,7 @@ User question: {message}"""
 ** 正确的 CoT 练习方式 **：
 
 1. **使用更复杂的问题**
-   选拥需要多步推理的问题，例如：
+   选择需要多步推理的问题，例如：
    - “一个人月薪 8000 元，每月花费3000元，剩下的钱用来投资，假设每年投资收益 12%，5 年后他能有多少钱？”
    - “有 3 个盒子，第一个盒子里有 2 个球，第二个盒子里有 3 个球，第三个盒子里有 4 个球。从每个盒子里各取出 1 个球，剩下多少个球？”
 
@@ -275,7 +271,6 @@ def chat(message, history):
     # 2. 安全处理 history（兼容新版 Gradio）
     if history:
         for turn in history:
-            # 新版 Gradio 中 history 可能是 tuple 或 list，可能有 2 或 3 个元素
             if isinstance(turn, (list, tuple)):
                 if len(turn) >= 2:
                     user_msg = turn[0]
@@ -323,6 +318,144 @@ demo.launch()
 
 ---
 
+### Step 6: 简单工具调用（Tool Use / Function Calling）入门
+
+** 目标 **：让模型能够主动调用外部工具（以查询天气为例），体验 Tool Use 的基本流程。
+
+** 重要说明 **：
+
+这个 Step **只是一个非常简化的入门示例**，目的是让你理解 Tool Use（工具调用）的基本概念和流程。
+
+- 后面几周（特别是 Agent 部分）我们会系统学习如何设计工具、处理并行调用、多工具协作、错误处理等更高级的内容。
+- 当前版本仅做演示，实际生产环境还需要更多工程化处理。
+
+### 为什么需要 Tool Use？
+
+当用户问“今天北京天气怎么样？”时，模型本身没有实时数据。它需要一个**工具**去获取信息，然后再基于工具返回的结果生成回答。
+
+Tool Use 的核心流程是：
+1. 模型判断需要调用工具
+2. 输出工具调用请求（Tool Call）
+3. 我们执行工具并获取结果
+4. 把工具结果返回给模型
+5. 模型基于工具结果生成最终回答
+
+### Step 6 实现思路
+
+我们将实现一个简单的“查天气”工具，并让模型能够自动调用它。
+
+**实现步骤**：
+
+1. **定义工具函数**（使用 `wttr.in` 免费接口，无需 API Key）
+2. **使用 LangChain 的 `@tool` 装饰器**
+3. **绑定工具到 LLM**
+4. **处理工具调用并返回结果**
+
+### 完数示例代码 (app_with_tool.py)
+
+在 `ai-learning` 文件夹中新建 `app_with_tool.py`，粘贴以下代码：
+
+```python
+# app_with_tool.py - 简单 Tool Use 示例（查询天气）
+
+import os
+from dotenv import load_dotenv
+import gradio as gr
+from langchain_openai import ChatOpenAI
+from langchain_core.tools import tool
+
+import requests  # 用于调用 wttr.in 接口
+
+load_dotenv()
+
+# 1. 定义工具：查询天气
+@tool
+def get_weather(city: str) -> str:
+    """Query current weather information for a specified city."""
+    try:
+        # 使用 wttr.in 免费接口（无需 API Key）
+        url = f"https://wttr.in/{city}?format=3"
+        response = requests.get(url, timeout=5)
+        if response.status_code == 200:
+            return f"{city} 当前天气：{response.text}"
+        else:
+            return f"无法获取 {city} 的天气信息"
+    except Exception as e:
+        return f"查询天气时出错：{str(e)}"
+
+# 2. 初始化 LLM 并绑定工具
+llm = ChatOpenAI(
+    model="deepseek-v4-flash",
+    api_key=os.getenv("DEEPSEEK_API_KEY"),
+    base_url="https://api.deepseek.com",
+    temperature=0.7,
+).bind_tools([get_weather])   # 绑定工具
+
+# 3. 聊天函数（处理工具调用）
+def chat_with_tool(message, history):
+    # 构建完整 Prompt
+    messages = [("system", "You are a helpful assistant that can use tools when needed.")]
+    
+    # 添加历史对话
+    for user_msg, assistant_msg in history:
+        messages.append(("user", user_msg))
+        messages.append(("assistant", assistant_msg))
+    
+    messages.append(("user", message))
+    
+    # 调用 LLM
+    response = llm.invoke(messages)
+    
+    # 如果模型输出了工具调用
+    if response.tool_calls:
+        tool_call = response.tool_calls[0]
+        tool_name = tool_call["name"]
+        tool_args = tool_call["args"]
+        
+        # 执行工具
+        if tool_name == "get_weather":
+            tool_result = get_weather.invoke(tool_args)
+            
+            # 把工具结果返回给模型
+            messages.append(response)
+            messages.append(("tool", tool_result, tool_call["id"]))
+            
+            # 再次调用模型生成最终回答
+            final_response = llm.invoke(messages)
+            return final_response.content
+    
+    return response.content
+
+# 创建界面
+with gr.Blocks(title="带工具调用的聊天应用") as demo:
+    gr.Markdown("# Step 6: 简单 Tool Use 示例\n模型可以自动调用工具查询天气")
+    
+    chatbot = gr.ChatInterface(
+        fn=chat_with_tool,
+        title="AI 助手（可查天气）",
+        examples=["北京现在天气怎么样？", "上海今天会下雨吗？"]
+    )
+
+# 启动
+demo.launch()
+```
+
+### 代码重点解释
+
+- `@tool` 装饰器：把普通函数变成可供模型调用的工具
+- `.bind_tools([get_weather])` ：告诉模型它可以使用这个工具
+- `tool_calls` ：模型输出的工具调用信息
+- 我们手动执行工具并把结果返回给模型
+
+** 这个版本的限制 **：
+- 工具调用逻辑是手动处理的
+- 只支持单工具
+- 没有并行调用和错误处理
+
+这些高级功能会在后面几周的 Agent 学习中详细讲解。
+
+---
+
 ## 本周完成后将掌握的内容
 
 完成第1周后，你将能够：
@@ -334,6 +467,7 @@ demo.launch()
 - 初步封装 LLM 调用逻辑
 - 处理 API 调用中的常见错误
 - 具备基本的代码组练和模块化能力
+- 初步了解 Tool Use 的基本概念和流程
 
 ---
 
