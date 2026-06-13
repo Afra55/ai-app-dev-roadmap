@@ -411,12 +411,14 @@ def chat_with_tool(message: str, history: list):
         if tool_name == "get_weather":
             tool_result = get_weather.invoke(tool_args)
 
-            # 把工具结果返回结果
-            messages.append(response)
-            messages.append(ToolMessage(content=str(tool_result), tool_call_id=tool_call["id"]))
+            # 构建最终消息列表（更安全的方式）
+            final_messages = messages + [
+                response,
+                ToolMessage(content=str(tool_result), tool_call_id=tool_call["id"])
+            ]
 
             # 再次调用模型生成最终回答
-            final_response = llm.invoke(messages)
+            final_response = llm.invoke(final_messages)
             return final_response.content
 
     return response.content
@@ -438,10 +440,9 @@ demo.launch()
 
 ### 代码重点解释
 
-- `SystemMessage / HumanMessage / AIMessage / ToolMessage` ：使用 LangChain 标准消息类，更稳定可靠
-- `history` 处理采用安全解包方式
+- 使用 `final_messages = messages + [...]` 的方式构建第二次调用的消息列表，更稳定可靠
+- 使用 LangChain 标准消息类
 - Tool Call 处理流程更清晰
-- 这个版本已修复之前的 `ValueError` 和 `NotImplementedError`
 
 ** 这个版本的限制 **：
 - 工具调用逻辑是手动处理的
