@@ -157,9 +157,9 @@ User question: {message}"""
 
 ### 2. Chain-of-Thought (CoT) 思维链练习（重点）
 
-** 为什么你加了“一步一步思考”结果没变？**
+** 为什义你加了“一步一步思考”结果没变？**
 
-很多斶候直接加 `Let’s think step by step` 对简单问题效果不明显，因为：
+很多时候直接加 `Let’s think step by step` 对简单问题效果不明显，因为：
 - 模型本身已经很强（特别是 deepseek-v4-flash）
 - 任务太简单，模型不需要明显的 CoT 也能答好
 
@@ -226,17 +226,101 @@ def call_llm(prompt: str) -> str:
 
 ---
 
-### Step 5: 集成完整简单应用
+### Step 5: 集成完整简单应用（带对话历史记录）
 
-** 目标 **：将前面所学内容集成到一个可复用的模块中。
+** 目标 **：将前面所学内容集成到一个完整的可复用应用中，并添加对话历史记录功能。
 
-1. 创建 `app.py` 集成所有功能。
-2. 添加基本对话历史记录。
-3. 测试完整流程并记录结果。
+** Step 5 详细实施步骤 **：
+
+1. **创建 `app.py` 文件**
+2. **引入之前的 `llm_utils.py`**
+3. **使用 Gradio 支持对话历史**
+4. **添加系统提示词**
+5. **测试完整功能**
+
+### 完整示例代码（带详细注释）
+
+在 `ai-learning` 文件夹中新建 `app.py`，粘贴以下完整代码：
+
+```python
+# app.py - 第1周最终集成应用
+
+import os                                   # 导入 os 模块，用于读取环境变量
+from dotenv import load_dotenv             # 导入 dotenv，用于加载 .env 文件
+import gradio as gr                         # 导入 Gradio，用于快速构建 Web 界面
+from llm_utils import call_llm             # 导入我们自己封装的 LLM 调用函数
+
+# 加载 .env 文件中的环境变量（包含 API Key）
+load_dotenv()
+
+# 定义系统提示词（让模型知道自己的角色）
+SYSTEM_PROMPT = """You are a helpful and friendly AI assistant. 
+Always answer in Chinese unless the user asks in another language.
+Be concise but informative."""
+
+# 存储对话历史的列表（每个元素是 [user_message, assistant_message] ）
+default_history = []
+
+# 主聊天函数
+def chat(message, history):
+    """
+    用户发送消息时调用的主函数
+    
+    Args:
+        message: 用户当前输入的消息
+        history: Gradio 自动传入的对话历史（列表形式）
+    
+    Returns:
+        模型的回答
+    """
+    
+    # 1. 构建完整的 Prompt，包含系统提示词和历史对话
+    full_prompt = SYSTEM_PROMPT + "\n\n"
+    
+    # 2. 添加历史对话到 Prompt 中
+    for user_msg, assistant_msg in history:
+        full_prompt += f"User: {user_msg}\nAssistant: {assistant_msg}\n\n"
+    
+    # 3. 添加当前用户问题
+    full_prompt += f"User: {message}\nAssistant:"
+    
+    # 4. 调用 LLM 获取回答
+    response = call_llm(full_prompt)
+    
+    # 5. 返回模型的回答
+    return response
+
+# 创建 Gradio 界面
+with gr.Blocks(title="第1周完整聊天应用") as demo:
+    gr.Markdown("# 第1周完整聊天应用\n带对话历史记录的简单 AI 聊天应用")
+    
+    # 创建聊天组件（自动支持历史记录）
+    chatbot = gr.ChatInterface(
+        fn=chat,                           # 使用上面定义的 chat 函数
+        title="AI 助手", 
+        description="支持多轮对话",
+        examples=["你好", "今天天气怎么样？", "简单介绍一下自己"]
+    )
+
+# 启动应用
+demo.launch()
+```
+
+### 代码重点解释：
+
+- `history` 参数：Gradio 会自动传入之前的对话历史，格式是 `[[user1, assistant1], [user2, assistant2], ...]`
+- `循环 history`：把之前的对话拼接到 Prompt 中，让模型看到之前的对话
+- `SYSTEM_PROMPT`：系统提示词，用来控制模型的行为风格
+- `gr.ChatInterface`：Gradio 提供的高级聊天组件，自动支持历史记录和显示
+
+** 建议 **：
+- 先运行以上代码，体验对话历史功能
+- 尝试多轮对话，观察模型是否能记住之前的内容
+- 可以尝试修改 `SYSTEM_PROMPT` 来改变 AI 的回答风格
 
 ---
 
-## 本周完成后将掌揣的内容
+## 本周完成后将掌握的内容
 
 完成第1周后，你将能够：
 
