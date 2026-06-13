@@ -361,7 +361,6 @@ from dotenv import load_dotenv
 import gradio as gr
 from langchain_openai import ChatOpenAI
 from langchain_core.tools import tool
-from langchain_core.messages import SystemMessage, HumanMessage, AIMessage, ToolMessage
 import requests
 
 load_dotenv()
@@ -387,22 +386,10 @@ llm = ChatOpenAI(
 
 
 def chat_with_tool(message: str, history: list):
-    # 构建消息列表
-    messages = [SystemMessage(content="你是一个有帮助的助手，必要时会使用工具查询信息。")]
+    # 第一次调用，让模型判断是否需要使用工具
+    response = llm.invoke(message)
 
-    # 安全处理历史对话
-    for turn in history:
-        if isinstance(turn, (list, tuple)) and len(turn) >= 2:
-            messages.append(HumanMessage(content=turn[0]))
-            messages.append(AIMessage(content=turn[1]))
-
-    # 添加当前用户消息
-    messages.append(HumanMessage(content=message))
-
-    # 第一次调用模型
-    response = llm.invoke(messages)
-
-    # 如果模型需要调用工具
+    # 如果模型决定调用工具
     if response.tool_calls:
         tool_call = response.tool_calls[0]
         tool_name = tool_call["name"]
@@ -411,14 +398,14 @@ def chat_with_tool(message: str, history: list):
         if tool_name == "get_weather":
             tool_result = get_weather.invoke(tool_args)
 
-            # 构建最终消息列表（更安全的方式）
-            final_messages = messages + [
-                response,
-                ToolMessage(content=str(tool_result), tool_call_id=tool_call["id"])
-            ]
+            # 重新构造 Prompt，把工具结果告诉模型
+            final_prompt = f"""User question: {message}
 
-            # 再次调用模型生成最终回答
-            final_response = llm.invoke(final_messages)
+Tool result: {tool_result}
+
+Please give the final answer based on the tool result."""
+
+            final_response = llm.invoke(final_prompt)
             return final_response.content
 
     return response.content
@@ -440,14 +427,13 @@ demo.launch()
 
 ### 代码重点解释
 
-- 使用 `final_messages = messages + [...]` 的方式构建第二次调用的消息列表，更稳定可靠
-- 使用 LangChain 标准消息类
-- Tool Call 处理流程更清晰
+- 这个版本更稳定、更容易理解
+- 避免了复杂的消息历史管理
+- 依然能体现 Tool Use 的核心思想：模型自动判断需要工具 → 执行工具 → 把结果反馈给模型
 
 ** 这个版本的限制 **：
-- 工具调用逻辑是手动处理的
-- 只支持单工具
-- 没有并行调用和错误处理
+- 工具调用逻辑是简化的
+- 没有完整的多轮对话历史支持
 
 这些高级功能会在后面几周的 Agent 学习中详细讳解。
 
