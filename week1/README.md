@@ -123,7 +123,7 @@ demo.launch()
 python test_chat.py
 ```
 
-3. 浏览器会自动打开界面。输入问题测试，观察输出是否为有效 JSON 格式。
+3. 浏览器会自动打开界面。输入问题测试，观寏输出是否为有效 JSON 格式。
 
 ** 常见问题解决 **：
 - API Key 错误：检查 `.env` 文件是否正确保存
@@ -313,7 +313,7 @@ demo.launch()
 
 ** 建议 **：
 - 先运行以上代码，体验对话历史功能
-- 尝试多轮对话，观察模型是否能记住之前的内容
+- 尝试多轮对话，观寏模型是否能记住之前的内容
 - 可以尝试修改 `SYSTEM_PROMPT` 来改变 AI 的回答风格
 
 ---
@@ -412,7 +412,7 @@ def chat_with_tool(message: str, history: list):
             tool_result = get_weather.invoke(tool_args)
 
             # 把工具结果返回结果
-            messages.append(response)                              # 添加模型的 tool_calls 消息
+            messages.append(response)
             messages.append(ToolMessage(content=str(tool_result), tool_call_id=tool_call["id"]))
 
             # 再次调用模型生成最终回答
@@ -441,7 +441,7 @@ demo.launch()
 - `SystemMessage / HumanMessage / AIMessage / ToolMessage` ：使用 LangChain 标准消息类，更稳定可靠
 - `history` 处理采用安全解包方式
 - Tool Call 处理流程更清晰
-- 这个版本已修复了之前的 `ValueError` 和 `NotImplementedError`
+- 这个版本已修复之前的 `ValueError` 和 `NotImplementedError`
 
 ** 这个版本的限制 **：
 - 工具调用逻辑是手动处理的
@@ -459,7 +459,7 @@ demo.launch()
 - 独立创建和管理 Python 虚拟环境
 - 正确调用 DeepSeek API 并管理 API Key
 - 使用 Gradio 快速构建简单聊天界面
-- 掌握 Prompt 工程核心技巧
+- 掌揣 Prompt 工程核心技巧
 - 初步封装 LLM 调用逻辑
 - 处理 API 调用中的常见错误
 - 具备基本的代码组练和模块化能力
