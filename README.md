@@ -1,107 +1,147 @@
-# AI应用开发学习路线（从Android转型AI App Dev）
+# AI Application Development Learning Path
 
-**GitHub Repo**: https://github.com/Afra55/ai-app-dev-roadmap
+**From Android Developer to AI App Developer**
 
-这个仓库用于存放完整的3个月学习路线 + 以后所有测试代码、项目代码。
+**Repository**: https://github.com/Afra55/ai-app-dev-roadmap
 
-由Grok为你定制。
-
----
-
-## 🎯 核心竞争力
-
-- **端侧AI** (LiteRT-LM / MLC LLM)
-- **端云协同**
-- **RAG + Agent**
-
-这是你作为Android开发者最大的区别于纯Python转行者的杀手锐。
+A structured, practical 3-month learning roadmap designed specifically for developers with Android experience who want to transition into AI application development. The path emphasizes **on-device AI**, **edge-cloud collaboration**, **RAG**, and **AI Agents**.
 
 ---
 
-## 📊 3个月路线概览
+## Table of Contents
 
-### 第一阶段（第1-4周）：基础打牢
-- **第1周**：Python速通 + Prompt + 国内LLM API（DeepSeek优先）
-- **第2周**：RAG核心实现（推荐 LlamaIndex）
-- **第3周**：安卓端侧AI（LiteRT-LM + Qwen2.5）
-- **第4周**：简单端云协同 + LangGraph Agent入门
-
-### 第二阶段（第5-8周）：分方向项目实战
-根据目标岗位选主方向（A/B/C），做具体App项目。
-
-### 第三阶段（第9-12周）：Portfolio打磨 + 简历 + 面试准备
+- [Core Differentiators](#core-differentiators)
+- [3-Month Roadmap Overview](#3-month-roadmap-overview)
+- [Repository Structure](#repository-structure)
+- [How to Use This Repository](#how-to-use-this-repository)
+- [Detailed Weekly Guides](#detailed-weekly-guides)
+- [Recommended Resources](#recommended-resources)
+- [Topics to Skip](#topics-to-skip)
+- [Expected Outcomes](#expected-outcomes)
 
 ---
 
-## 📦 仓库结构（建议）
+## Core Differentiators
+
+This roadmap is built around the unique strengths of an Android developer:
+
+- **On-device AI** (LiteRT-LM / MLC LLM)
+- **Edge-Cloud Collaboration**
+- **RAG Pipelines** and **AI Agents** (LangGraph)
+
+These capabilities give you a significant advantage over developers transitioning purely from Python backgrounds.
+
+---
+
+## 3-Month Roadmap Overview
+
+### Phase 1: Foundations (Weeks 1–4)
+
+| Week | Focus | Key Deliverable |
+|------|-------|-----------------|
+| 1    | Python + Prompt Engineering + DeepSeek API | Structured chat application |
+| 2    | RAG Implementation | Local document Q&A tool + FastAPI |
+| 3    | On-device AI (Android) | Offline Qwen2.5 chat app on Android |
+| 4    | Basic Edge-Cloud + LangGraph Agent | Simple ReAct Agent + edge-cloud logic |
+
+### Phase 2: Specialization & Projects (Weeks 5–8)
+
+Choose one primary direction based on your target job:
+
+- **Direction A** (AI Application Software Engineer): UX engineering + advanced on-device AI → Edge-Cloud Smart Notes App
+- **Direction B** (State-owned Bank Android Developer): Advanced Android + security → Bank Intelligent Customer Service App
+- **Direction C** (State-owned AI Agent Developer): Python full-stack + advanced Agents → Enterprise Internal Assistant Agent
+
+### Phase 3: Portfolio, Resume & Interview (Weeks 9–12)
+
+- Portfolio polishing
+- Resume optimization (highlight on-device AI and edge-cloud strengths)
+- Interview preparation
+- Job applications
+
+---
+
+## Repository Structure
 
 ```
 ai-app-dev-roadmap/
-├── README.md              # 高层路线概览 + 使用说明
+├── README.md                 # High-level overview and navigation
 ├── week1/
-│   └── README.md          # 第1周详细步骤（按天更新）
+│   └── README.md             # Detailed daily steps for Week 1
 ├── week2/
 │   └── README.md
-├── projects/                # 后续项目代码
-├── docs/                    # 额外资料
+├── projects/                 # Project code and documentation
+├── docs/                     # Additional reference materials
 └── .gitignore
 ```
 
-** 每周详细操作步骤请查看对应 `weekX/README.md` **
+---
+
+## How to Use This Repository
+
+1. **Star** and **Fork** this repository
+2. **Clone** it to your local machine
+3. Follow the **detailed weekly guides** (`weekX/README.md`) for hands-on tasks
+4. Commit your code and notes weekly
+5. Use the Issues section to track questions or progress
+
+**Recommendation**: Treat `weekX/README.md` as your primary daily reference.
 
 ---
 
-## 📝 详细路线（高层概览）
+## Detailed Weekly Guides
 
-### 第一阶段：基础打牢（第1-4周）
+For in-depth, step-by-step instructions (including code examples, exercises, and verification), please refer to the weekly README files:
 
-** 第1周**：Python速通 + Prompt + 国内LLM API（DeepSeek优先）  
-**第2周**：RAG核心实现（推荐 LlamaIndex）  
-**第3周**：安卓端侧AI（LiteRT-LM + Qwen2.5）  
-**第4周**：简单端云协同 + LangGraph Agent入门
-
-### 第二阶段：分方向项目实战（第5-8周）
-
-** 方向A**（岗位1 AI应用软件开发工程师）：端云协同智能笔记App  
-** 方向B**（岗位2 国有银行Android开发）：银行智能客服App  
-** 方向C**（岗位3 国企AI Agent应用开发）：企业内部智能助手Agent
-
-### 第三阶段：Portfolio打磨 + 简历 + 面试准备（第9-12周）
+- [Week 1: Python + Prompt + DeepSeek API](week1/README.md)
+- Week 2: RAG Implementation (coming soon)
+- Week 3: On-device AI with LiteRT-LM (coming soon)
+- Week 4: Edge-Cloud Collaboration & LangGraph (coming soon)
 
 ---
 
-## 📚 资源列表（完全免费主干）
+## Recommended Resources
 
-- Datawhale 《动手学大模型应用开发》
-- LiteRT-LM 官方文档
-- LangGraph 官方教程
-- LlamaIndex 官方文档
-- B站黑马程序员 2026 大模型应用开发视频
-- DeepSeek API
+**Primary (Free & Focused)**:
 
----
+- Datawhale: *Hands-on Large Model Application Development*
+- Google AI Edge: LiteRT-LM Official Documentation
+- LangGraph Official Tutorials
+- LlamaIndex Documentation
+- Bilibili: Black Horse Programmer 2026 LLM Application Development Series
 
-## ❌ 绝对不要学的内容
-
-- 数学与底层理论
-- 大模型训练（预训练、SFT、RLHF等）
-- 底层系统优化
-- 重型MLOps
+**API Provider**:
+- DeepSeek Platform
 
 ---
 
-## 🚀 如何使用这个仓库
+## Topics to Skip
 
-1. Star 并 Fork
-2. Clone 到本地
-3. 每周按 `weekX/README.md` 完成详细步骤
-4. 每周代码提交到对应文件夹
-5. 欢迎在 Issues 提出问题
+To stay efficient, deliberately avoid the following areas during the first 3 months:
 
-** 接下来行动 **：
-今天开始第1周详细步骤（请查看 week1/README.md）
+- Deep mathematics and underlying theory (Transformer internals, attention formulas, etc.)
+- Large model training (pre-training, SFT, RLHF, LoRA, distributed training)
+- Low-level system optimization (CUDA kernels, custom operators)
+- Heavy MLOps tooling
+- Non-core multimodal or generative model training
 
 ---
 
-** 由Grok为你创建并维护 **
-** 最后更新时间 **：2026年6月12日
+## Expected Outcomes
+
+By the end of this 3-month program, you will have:
+
+- A complete portfolio of practical AI applications (including on-device and edge-cloud projects)
+- Strong resume content highlighting unique Android + AI strengths
+- Interview-ready knowledge of RAG, Agents, and on-device deployment
+- A systematic, repeatable learning method for future AI topics
+
+---
+
+## Notes
+
+This repository is actively maintained and updated as learning progresses. Weekly detailed guides will be expanded with code, exercises, and best practices.
+
+For questions or suggestions, please open an Issue.
+
+**Last updated**: June 2026
