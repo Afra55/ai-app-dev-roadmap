@@ -181,7 +181,7 @@ User question: {message}"""
    - 版本 B：加上 `Think step by step before giving the final answer`
    - 用同一个复杂问题测试两个版本，对比 `reasoning` 字段的质量和 `answer` 的准确性。
 
-** 建议 **：CoT 在简单问题上效果并不明显，但在需要逻辑推理、计算、多步解决的问题上效果很明显。
+** 建议 **：CoT 在简单问题上效果并不明显，佗在需要逻辑推理、计算、多步解决的问题上效果很明显。
 
 ---
 
@@ -326,7 +326,7 @@ demo.launch()
 
 这个 Step **只是一个非常简化的入门示例**，目的是让你理解 Tool Use（工具调用）的基本概念和流程。
 
-- 后面几周（特别是 Agent 部分）我们会系统学习如何设计工具、处理并行调用、多工具协作、错误处理等更高级的内容。
+- 后面几周（特别是 Agent 部分）我们会系统学习如何设计工具、处理并行调用、多工具协作等更高级的内容。
 - 当前版本仅做演示，实际生产环境还需要更多工程化处理。
 
 ### 为什么需要 Tool Use？
@@ -344,14 +344,14 @@ Tool Use 的核心流程是：
 
 我们将实现一个简单的“查天气”工具，并让模型能够自动调用它。
 
-**实现步骤**：
+** 实现步骤 **：
 
 1. **定义工具函数**（使用 `wttr.in` 免费接口，无需 API Key）
 2. **使用 LangChain 的 `@tool` 装饰器**
 3. **绑定工具到 LLM**
 4. **处理工具调用并返回结果**
 
-### 完数示例代码 (app_with_tool.py)
+### 完整示例代码 (app_with_tool.py)
 
 在 `ai-learning` 文件夹中新建 `app_with_tool.py`，粘贴以下代码：
 
@@ -396,10 +396,17 @@ def chat_with_tool(message, history):
     # 构建完整 Prompt
     messages = [("system", "You are a helpful assistant that can use tools when needed.")]
     
-    # 添加历史对话
-    for user_msg, assistant_msg in history:
-        messages.append(("user", user_msg))
-        messages.append(("assistant", assistant_msg))
+    # 2. 安全处理 history（兼容新版 Gradio）
+    if history:
+        for turn in history:
+            if isinstance(turn, (list, tuple)):
+                if len(turn) >= 2:
+                    user_msg = turn[0]
+                    assistant_msg = turn[1]
+                    messages.append(("user", user_msg))
+                    messages.append(("assistant", assistant_msg))
+                elif len(turn) == 1:
+                    messages.append(("user", turn[0]))
     
     messages.append(("user", message))
     
@@ -428,7 +435,7 @@ def chat_with_tool(message, history):
 
 # 创建界面
 with gr.Blocks(title="带工具调用的聊天应用") as demo:
-    gr.Markdown("# Step 6: 简单 Tool Use 示例\n模型可以自动调用工具查询天气")
+    gr.Markdown("# Step 6: 简单 Tool Use 示例\n模型可以自动调用工具查天气")
     
     chatbot = gr.ChatInterface(
         fn=chat_with_tool,
@@ -452,7 +459,7 @@ demo.launch()
 - 只支持单工具
 - 没有并行调用和错误处理
 
-这些高级功能会在后面几周的 Agent 学习中详细讲解。
+这些高级功能会在后面几周的 Agent 学习中详细讳解。
 
 ---
 
