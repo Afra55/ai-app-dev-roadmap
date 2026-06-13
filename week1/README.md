@@ -88,9 +88,9 @@ DEEPSEEK_API_KEY=sk-你的 DeepSeek API Key
 
 `demo.launch()` 会启动一个简易的 Web 服务器，并自动打开浏览器。这是 Gradio 提供的功能，用来快速测试聊天应用。
 
-** 为什么返回的是 JSON？**
+** 为什义返回的是 JSON？**
 
-我们在 `prompt` 里面明确要求了模型严格按照 JSON 格式回答。这是 Prompt 工程的一种常见技巧，叫做 **Structured Output**。
+我们在 `prompt` 里面明确要求严格按照 JSON 格式回答。这是 Prompt 工程的一种常见技巧，叫做 **Structured Output**。
 
 ### 代码（已更新为 deepseek-v4-flash）
 
@@ -166,7 +166,7 @@ User question: {message}"""
 ** 正确的 CoT 练习方式 **：
 
 1. **使用更复杂的问题**
-   选择需要多步推理的问题，例如：
+   选拥需要多步推理的问题，例如：
    - “一个人月薪 8000 元，每月花费3000元，剩下的钱用来投资，假设每年投资收益 12%，5 年后他能有多少钱？”
    - “有 3 个盒子，第一个盒子里有 2 个球，第二个盒子里有 3 个球，第三个盒子里有 4 个球。从每个盒子里各取出 1 个球，剩下多少个球？”
 
@@ -238,9 +238,7 @@ def call_llm(prompt: str) -> str:
 4. **添加系统提示词**
 5. **测试完整功能**
 
-### 完整示例代码（带详细注释）
-
-在 `ai-learning` 文件夹中新建 `app.py`，粘贴以下完整代码：
+### 完整示例代码（带详细注释 + 兼容新版 Gradio）
 
 ```python
 # app.py - 第1周最终集成应用
@@ -258,9 +256,6 @@ SYSTEM_PROMPT = """You are a helpful and friendly AI assistant.
 Always answer in Chinese unless the user asks in another language.
 Be concise but informative."""
 
-# 存储对话历史的列表（每个元素是 [user_message, assistant_message] ）
-default_history = []
-
 # 主聊天函数
 def chat(message, history):
     """
@@ -268,7 +263,7 @@ def chat(message, history):
     
     Args:
         message: 用户当前输入的消息
-        history: Gradio 自动传入的对话历史（列表形式）
+        history: Gradio 自动传入的对话历史
     
     Returns:
         模型的回答
@@ -277,9 +272,17 @@ def chat(message, history):
     # 1. 构建完整的 Prompt，包含系统提示词和历史对话
     full_prompt = SYSTEM_PROMPT + "\n\n"
     
-    # 2. 添加历史对话到 Prompt 中
-    for user_msg, assistant_msg in history:
-        full_prompt += f"User: {user_msg}\nAssistant: {assistant_msg}\n\n"
+    # 2. 安全处理 history（兼容新版 Gradio）
+    if history:
+        for turn in history:
+            # 新版 Gradio 中 history 可能是 tuple 或 list，可能有 2 或 3 个元素
+            if isinstance(turn, (list, tuple)):
+                if len(turn) >= 2:
+                    user_msg = turn[0]
+                    assistant_msg = turn[1]
+                    full_prompt += f"User: {user_msg}\nAssistant: {assistant_msg}\n\n"
+                elif len(turn) == 1:
+                    full_prompt += f"User: {turn[0]}\n\n"
     
     # 3. 添加当前用户问题
     full_prompt += f"User: {message}\nAssistant:"
@@ -294,7 +297,7 @@ def chat(message, history):
 with gr.Blocks(title="第1周完整聊天应用") as demo:
     gr.Markdown("# 第1周完整聊天应用\n带对话历史记录的简单 AI 聊天应用")
     
-    # 创建聊天组件（自动支持历史记录）
+    # 创建聊天组件
     chatbot = gr.ChatInterface(
         fn=chat,                           # 使用上面定义的 chat 函数
         title="AI 助手", 
@@ -308,8 +311,8 @@ demo.launch()
 
 ### 代码重点解释：
 
-- `history` 参数：Gradio 会自动传入之前的对话历史，格式是 `[[user1, assistant1], [user2, assistant2], ...]`
-- `循环 history`：把之前的对话拼接到 Prompt 中，让模型看到之前的对话
+- `history` 参数：Gradio 会自动传入之前的对话历史
+- **兼容处理**：新版 Gradio 中 `history` 可能是 tuple 或 list，元素数量可能不是固定 2 个，所以采用 `if len(turn) >= 2` 进行安全解包
 - `SYSTEM_PROMPT`：系统提示词，用来控制模型的行为风格
 - `gr.ChatInterface`：Gradio 提供的高级聊天组件，自动支持历史记录和显示
 
