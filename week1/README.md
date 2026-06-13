@@ -73,7 +73,7 @@ DEEPSEEK_API_KEY=sk-你的 DeepSeek API Key
 
 ### Step 2: 创建并运行第一个结构化输出聊天应用
 
-** 目标 **：验证 API 调用正常，并实现结构化输出功能。
+** 目标 **：验诉 API 调用正常，并实现结构化输出功能。
 
 ### 代码解释（重要）
 
@@ -156,7 +156,7 @@ User question: {message}"""
 ** 为什义你加了“一步一步思考”结果没变？**
 
 很多时候直接加 `Let’s think step by step` 对简单问题效果不明显，因为：
-- 模型本身已经很强（特别是 deepseek-v4-flash）
+- 模型本身已绌很强（特别是 deepseek-v4-flash）
 - 任务太简单，模型不需要明显的 CoT 也能答好
 
 ** 正确的 CoT 练习方式 **：
@@ -320,7 +320,7 @@ demo.launch()
 
 ### Step 6: 简单工具调用（Tool Use / Function Calling）入门
 
-** 目标 **：让模型能够主动调用外部工具（以查询天气为例），体验 Tool Use 的基本流程。
+** 目标 **：让模型能够主加调用外部工具（以查询天气为例），体验 Tool Use 的基本流程。
 
 ** 重要说明 **：
 
@@ -412,8 +412,8 @@ def chat_with_tool(message: str, history: list):
             tool_result = get_weather.invoke(tool_args)
 
             # 把工具结果返回结果
-            messages.append(response)
-            messages.append(ToolMessage(content=tool_result, tool_call_id=tool_call["id"]))
+            messages.append(response)                              # 添加模型的 tool_calls 消息
+            messages.append(ToolMessage(content=str(tool_result), tool_call_id=tool_call["id"]))
 
             # 再次调用模型生成最终回答
             final_response = llm.invoke(messages)
