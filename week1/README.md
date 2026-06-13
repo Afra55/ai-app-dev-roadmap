@@ -5,7 +5,7 @@
 完成本周学习后，你将能够：
 
 - 快速掌握 Python 异步编程和类型注解
-- 掌握 Prompt 工程核心技巧（CoT、结构化输出、function calling）
+- 掌握 Prompt 工程的核心技巧和实际应用
 - 使用 DeepSeek API 构建简单的 LLM 应用
 - 初步封装 LLM 调用逻辑
 - 处理 API 调用中的常见错误
@@ -131,57 +131,84 @@ python test_chat.py
 
 ---
 
-### Step 3: Prompt 技巧实践（结构化输出与 CoT）
+### Step 3: Prompt 工程核心技巧实践
 
-** 目标 **：深入理解并实践 Prompt 工程中最重要的两种技巧。
+** 目标 **：理解 Prompt 工程的作用和价值，掌握实际工作中最常用、最有效的核心技巧。
 
-### 1. 结构化输出练习
+### Prompt 工程是做什么的？
 
-将 prompt 替换为以下模板，测试不同问题：
+**Prompt Engineering（提示词工程）** 是指通过设计、优化、组合提示词（Prompt），使大模型输出更准确、更符合预期、更安全的技能。
 
-```python
-prompt = f"""You are a helpful assistant. Please answer the user's question in the following strict JSON format:
-{{"answer": "concise and accurate answer", "reasoning": "brief reasoning", "confidence": "high/medium/low"}}
+简单来说，就是“** 教会 AI 怎么思考和回答 **”。
 
-User question: {message}"""
+### Prompt 工程主要用来做什么？
+
+| 目的               | 说明                                   | 常见场景               |
+|-----------------------|---------------------------------------------|----------------------------------|
+| 提升答案质量   | 减少错误、假象、偏差           | 问答、总结、分析     |
+| 控制输出格式   | 让模型按固定格式输出（JSON等） | 结构化输出、Agent工具调用 |
+| 让模型步骤推理 | 提升复杂任务的正确率           | 数学、逻辑、多步解决 |
+| 控制风格和要求 | 让 AI 按指定角色、语气回答     | 客服、写作、教学等     |
+| 减少幻觉           | 通过限制和验证减少编造内容     | 业务场景安全性要求   |
+
+### 必须掌握的 Prompt 核心技巧（Week 1 重点）
+
+#### 1. **角色设定（Role / Persona）**
+给 AI 定义一个具体角色，能大大提升回答质量。
+
+```text
+You are a senior software architect with 15 years of experience in backend systems.
 ```
 
-** 测试题目建议 **：
-- “说一下你的优点”
-- “如何有效学习 Python?”
-- “一个人如何提升写作能力？”
+#### 2. **明确指令 + 限制（Clear Instructions + Constraints）**
+要求越具体越好，并给出明确的限制条件。
 
-### 2. Chain-of-Thought (CoT) 思维链练习（重点）
-
-** 为什义你加了“一步一步思考”结果没变？**
-
-很多时候直接加 `Let’s think step by step` 对简单问题效果不明显，因为：
-- 模型本身已绌很强（特别是 deepseek-v4-flash）
-- 任务太简单，模型不需要明显的 CoT 也能答好
-
-** 正确的 CoT 练习方式 **：
-
-1. **使用更复杂的问题**
-   选择需要多步推理的问题，例如：
-   - “一个人月薪 8000 元，每月花费3000元，剩下的钱用来投资，假设每年投资收益 12%，5 年后他能有多少钱？”
-   - “有 3 个盒子，第一个盒子里有 2 个球，第二个盒子里有 3 个球，第三个盒子里有 4 个球。从每个盒子里各取出 1 个球，剩下多少个球？”
-
-2. **在 JSON 中输出思考过程**
-   修改 prompt ，让模型在 `reasoning` 字段里写出思考过程：
-
-```python
-prompt = f"""You are a helpful assistant. Please answer the user's question in the following strict JSON format. Think step by step before giving the final answer.
-{{"answer": "final answer", "reasoning": "detailed step-by-step reasoning", "confidence": "high/medium/low"}}
-
-User question: {message}"""
+```text
+Please answer the question in Chinese. Keep the answer within 150 words. Do not mention that you are an AI.
 ```
 
-3. **对比实验**
-   - 版本 A：不加 CoT，直接要求回答
-   - 版本 B：加上 `Think step by step before giving the final answer`
-   - 用同一个复杂问题测试两个版本，对比 `reasoning` 字段的质量和 `answer` 的准确性。
+#### 3. **思维链（Chain-of-Thought, CoT）**
+让模型先思考再回答，对复杂问题效果显著。
 
-** 建议 **：CoT 在简单问题上效果并不明显，但在需要逻辑推理、计算、多步解决的问题上效果很明显。
+```text
+Think step by step before giving the final answer.
+```
+
+#### 4. **结构化输出（Structured Output）**
+强制模型按 JSON、列表等固定格式输出，是做 Agent 和 RAG 的基础。
+
+```text
+Please respond strictly in the following JSON format:
+{"answer": "...", "confidence": "high/medium/low"}
+```
+
+#### 5. **示例引导（Few-shot Prompting）**
+给出 1~3 个示例，让模型模仿格式和逻辑。
+
+#### 6. **分隔符与格式化**
+使用 ``` 、""" 、<task> 等分隔符，让模型更容易区分不同部分。
+
+### Prompt 必须用英文吗？
+
+**不一定必须用英文**。
+
+- 现在的主流模型（DeepSeek、Qwen、GPT-4o 等）对中文的理解和生成能力已经很强。
+- 用中文写 Prompt 完全可以，特别是做业务场景时更方便。
+- 但是，英文 Prompt 在以下情况下更有优势：
+  - 需要更精准的控制和复杂推理时
+  - 使用最新的技术技巧（很多研究是英文）
+  - 做国际项目或与外国模型交互时
+
+** 建议 **：
+- 日常使用中文 Prompt 就可以
+- 重要任务或需要高质量输出时，尝试用英文 Prompt
+- 最理想状态是两者都能掌握
+
+### Step 3 实践建议
+
+1. 每次写 Prompt 都尝试加上 **角色 + 明确指令 + CoT + 结构化输出**
+2. 多做 A/B 对比实验（加 CoT vs 不加 CoT）
+3. 把好的 Prompt 保存起来，形成自己的 Prompt 库
 
 ---
 
@@ -429,7 +456,7 @@ demo.launch()
 
 - 这个版本更稳定、更容易理解
 - 避免了复杂的消息历史管理
-- 依然能体现 Tool Use 的核心思想：模型自动判断需要工具 → 执行工具 → 把结果反馈给模型
+- 依然能体现 Tool Use 的核心思想：模型自动判断需要工具 → 执行工具 → 把结果反馈结果结果结果结果结果结果结果结果结果结果结果结果结果结果结果结果结果结果结果结果结果结果结果结果结果结果结果结果结果结果结果结果结果结果结果
 
 ** 这个版本的限制 **：
 - 工具调用逻辑是简化的
@@ -446,7 +473,7 @@ demo.launch()
 - 独立创建和管理 Python 虚拟环境
 - 正确调用 DeepSeek API 并管理 API Key
 - 使用 Gradio 快速构建简单聊天界面
-- 掌揣 Prompt 工程核心技巧
+- 掌揣 Prompt 工程的核心技巧
 - 初步封装 LLM 调用逻辑
 - 处理 API 调用中的常见错误
 - 具备基本的代码组练和模块化能力
@@ -456,4 +483,4 @@ demo.launch()
 
 ** 说明 **：
 本文档会随着学习进度持续更新。
-每完成一个 Step 后，建议在本文件末尾添加自己的心得和笔记。
+每完成一个 Step 后，廚议在本文件末尾添加自己的心得和笔记。
