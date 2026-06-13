@@ -1,147 +1,147 @@
-# AI Application Development Learning Path
+# AI应用开发学习路线
 
-**From Android Developer to AI App Developer**
+**从 Android 开发者转型 AI 应用开发者**
 
-**Repository**: https://github.com/Afra55/ai-app-dev-roadmap
+**仓库地址**: https://github.com/Afra55/ai-app-dev-roadmap
 
-A structured, practical 3-month learning roadmap designed specifically for developers with Android experience who want to transition into AI application development. The path emphasizes **on-device AI**, **edge-cloud collaboration**, **RAG**, and **AI Agents**.
+为有 Android 开发经验的开发者设计的系统化、可落地的 3 个月学习路线。重点突出端侧 AI、端云协同、RAG 与 AI Agent 能力。
 
 ---
 
-## Table of Contents
+## 目录
 
 - [Core Differentiators](#core-differentiators)
-- [3-Month Roadmap Overview](#3-month-roadmap-overview)
-- [Repository Structure](#repository-structure)
-- [How to Use This Repository](#how-to-use-this-repository)
-- [Detailed Weekly Guides](#detailed-weekly-guides)
-- [Recommended Resources](#recommended-resources)
-- [Topics to Skip](#topics-to-skip)
-- [Expected Outcomes](#expected-outcomes)
+- [3 个月路线概览](#3%E4%B8%AA%E6%9C%88%E8%B7%AF%E7%BA%BF%E6%A6%82%E8%A7%88)
+- [仓库结构](#%E4%BB%93%E5%BA%93%E7%BB%93%E6%9E%84)
+- [如何使用本仓库](#%E5%A6%82%E4%BD%95%E4%BD%BF%E7%94%A8%E6%9C%AC%E4%BB%93%E5%BA%93)
+- [每周详细指导](#%E6%AF%8F%E5%91%A8%E8%AF%A6%E7%BB%86%E6%8C%87%E5%AF%BC)
+- [推荐资源](#%E6%8E%A8%E8%8D%90%E8%B5%84%E6%BA%90)
+- [建议跳过的内容](#%E5%BB%BA%E8%AE%AE%E8%B7%B3%E8%BF%87%E7%9A%84%E5%86%85%E5%AE%B9)
+- [期望学习成果](#%E6%9C%9F%E6%9C%9B%E5%AD%A6%E4%B9%A0%E6%88%90%E6%9E%9C)
 
 ---
 
 ## Core Differentiators
 
-This roadmap is built around the unique strengths of an Android developer:
+本路线依托 Android 开发者的核心优势：
 
-- **On-device AI** (LiteRT-LM / MLC LLM)
-- **Edge-Cloud Collaboration**
-- **RAG Pipelines** and **AI Agents** (LangGraph)
+- **端侧 AI** (LiteRT-LM / MLC LLM)
+- **端云协同**
+- **RAG 与 AI Agent** (LangGraph)
 
-These capabilities give you a significant advantage over developers transitioning purely from Python backgrounds.
-
----
-
-## 3-Month Roadmap Overview
-
-### Phase 1: Foundations (Weeks 1–4)
-
-| Week | Focus | Key Deliverable |
-|------|-------|-----------------|
-| 1    | Python + Prompt Engineering + DeepSeek API | Structured chat application |
-| 2    | RAG Implementation | Local document Q&A tool + FastAPI |
-| 3    | On-device AI (Android) | Offline Qwen2.5 chat app on Android |
-| 4    | Basic Edge-Cloud + LangGraph Agent | Simple ReAct Agent + edge-cloud logic |
-
-### Phase 2: Specialization & Projects (Weeks 5–8)
-
-Choose one primary direction based on your target job:
-
-- **Direction A** (AI Application Software Engineer): UX engineering + advanced on-device AI → Edge-Cloud Smart Notes App
-- **Direction B** (State-owned Bank Android Developer): Advanced Android + security → Bank Intelligent Customer Service App
-- **Direction C** (State-owned AI Agent Developer): Python full-stack + advanced Agents → Enterprise Internal Assistant Agent
-
-### Phase 3: Portfolio, Resume & Interview (Weeks 9–12)
-
-- Portfolio polishing
-- Resume optimization (highlight on-device AI and edge-cloud strengths)
-- Interview preparation
-- Job applications
+这些能力使你相比纯 Python 转行者具有明显优势。
 
 ---
 
-## Repository Structure
+## 3 个月路线概览
+
+### 第一阶段：基础打牢（第 1-4 周）
+
+| 周次 | 重点 | 核心产出 |
+|------|-------|------------------|
+| 1    | Python + Prompt 工程 + DeepSeek API | 结构化输出聊天应用 |
+| 2    | RAG 实现 | 本地文档问答工具 + FastAPI |
+| 3    | 安卓端侧 AI | 离线 Qwen2.5 聊天 App |
+| 4    | 简单端云协同 + LangGraph Agent | ReAct Agent + 端云逻辑 |
+
+### 第二阶段：分方向项目实战（第 5-8 周）
+
+根据目标岗位选择主方向：
+
+- **方向 A** (岗位1 AI 应用软件开发工程师)：UX 工程化 + 高级端侧 AI → 端云协同智能笔记 App
+- **方向 B** (岗位2 国有银行 Android 开发)：高级 Android + 安全开发 → 银行智能客服 App
+- **方向 C** (岗位3 国企 AI Agent 应用开发)：Python 全栈 + 高级 Agent → 企业内部智能助手 Agent
+
+### 第三阶段：Portfolio 打磨 + 简历 + 面试准备（第 9-12 周）
+
+- Portfolio 打磨
+- 简历优化（突出端侧 AI 与 端云协同优势）
+- 面试准备
+- 投递岗位
+
+---
+
+## 仓库结构
 
 ```
 ai-app-dev-roadmap/
-├── README.md                 # High-level overview and navigation
+├── README.md                 # 高层概览与导航
 ├── week1/
-│   └── README.md             # Detailed daily steps for Week 1
+│   └── README.md             # 第1周详细步骤
 ├── week2/
 │   └── README.md
-├── projects/                 # Project code and documentation
-├── docs/                     # Additional reference materials
+├── projects/                 # 项目代码与文档
+├── docs/                     # 附加参考资料
 └── .gitignore
 ```
 
 ---
 
-## How to Use This Repository
+## 如何使用本仓库
 
-1. **Star** and **Fork** this repository
-2. **Clone** it to your local machine
-3. Follow the **detailed weekly guides** (`weekX/README.md`) for hands-on tasks
-4. Commit your code and notes weekly
-5. Use the Issues section to track questions or progress
+1. Star 并 Fork 本仓库
+2. Clone 到本地
+3. 按照 `weekX/README.md` 完成每周详细任务
+4. 每周提交代码与笔记
+5. 通过 Issues 追踪问题
 
-**Recommendation**: Treat `weekX/README.md` as your primary daily reference.
+** 建议 **：主要参考 `weekX/README.md` 进行学习。
 
 ---
 
-## Detailed Weekly Guides
+## 每周详细指导
 
-For in-depth, step-by-step instructions (including code examples, exercises, and verification), please refer to the weekly README files:
+详细步骤、代码示例和练习请查看对应周的 README：
 
 - [Week 1: Python + Prompt + DeepSeek API](week1/README.md)
-- Week 2: RAG Implementation (coming soon)
-- Week 3: On-device AI with LiteRT-LM (coming soon)
-- Week 4: Edge-Cloud Collaboration & LangGraph (coming soon)
+- Week 2: RAG 实现（即将更新）
+- Week 3: 安卓端侧 AI（即将更新）
+- Week 4: 端云协同与 LangGraph（即将更新）
 
 ---
 
-## Recommended Resources
+## 推荐资源
 
-**Primary (Free & Focused)**:
+** 主要资源（免费且集中） **：
 
-- Datawhale: *Hands-on Large Model Application Development*
-- Google AI Edge: LiteRT-LM Official Documentation
-- LangGraph Official Tutorials
-- LlamaIndex Documentation
-- Bilibili: Black Horse Programmer 2026 LLM Application Development Series
+- Datawhale 《动手学大模型应用开发》
+- Google AI Edge: LiteRT-LM 官方文档
+- LangGraph 官方教程
+- LlamaIndex 官方文档
+- B站黑马程序员 2026 大模型应用开发系列
 
-**API Provider**:
+**API 提供商** ：
 - DeepSeek Platform
 
 ---
 
-## Topics to Skip
+## 建议跳过的内容
 
-To stay efficient, deliberately avoid the following areas during the first 3 months:
+为保持效率，前 3 个月建议避免以下内容：
 
-- Deep mathematics and underlying theory (Transformer internals, attention formulas, etc.)
-- Large model training (pre-training, SFT, RLHF, LoRA, distributed training)
-- Low-level system optimization (CUDA kernels, custom operators)
-- Heavy MLOps tooling
-- Non-core multimodal or generative model training
-
----
-
-## Expected Outcomes
-
-By the end of this 3-month program, you will have:
-
-- A complete portfolio of practical AI applications (including on-device and edge-cloud projects)
-- Strong resume content highlighting unique Android + AI strengths
-- Interview-ready knowledge of RAG, Agents, and on-device deployment
-- A systematic, repeatable learning method for future AI topics
+- 数学与底层理论（Transformer 细节、注意力公式等）
+- 大模型训练（预训练、SFT、RLHF、LoRA 等）
+- 底层系统优化（CUDA kernel 等）
+- 重型 MLOps 工具
+- 非核心多模态训练
 
 ---
 
-## Notes
+## 期望学习成果
 
-This repository is actively maintained and updated as learning progresses. Weekly detailed guides will be expanded with code, exercises, and best practices.
+完成 3 个月学习后，你将拥有：
 
-For questions or suggestions, please open an Issue.
+- 完整的 AI 应用 Portfolio（包含端侧 AI 和 端云协同项目）
+- 突出端侧 AI 与 端云协同优势的简历内容
+- 面试准备就绪的 RAG、Agent 和 端侧部署知识
+- 系统化的 AI 学习方法
 
-**Last updated**: June 2026
+---
+
+## 备注
+
+本仓库正在持续更新中。每周详细指导会随着学习进度不断完善。
+
+如有问题请提交 Issue。
+
+** 最后更新时间 **：2026 年 6 月
