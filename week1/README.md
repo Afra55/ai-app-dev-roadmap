@@ -133,7 +133,7 @@ python test_chat.py
 
 ### Step 3: Prompt 技巧实践（结构化输出与 CoT）
 
-** 目标 **：深入理解并实践 Prompt 工程中最重要的个两种技巧。
+** 目标 **：深入理解并实践 Prompt 工程中最重要的两种技巧。
 
 ### 1. 结构化输出练习
 
@@ -181,7 +181,7 @@ User question: {message}"""
    - 版本 B：加上 `Think step by step before giving the final answer`
    - 用同一个复杂问题测试两个版本，对比 `reasoning` 字段的质量和 `answer` 的准确性。
 
-** 建议 **：CoT 在简单问题上效果并不明显，佗在需要逻辑推理、计算、多步解决的问题上效果很明显。
+** 建议 **：CoT 在简单问题上效果并不明显，但在需要逻辑推理、计算、多步解决的问题上效果很明显。
 
 ---
 
@@ -326,7 +326,7 @@ demo.launch()
 
 这个 Step **只是一个非常简化的入门示例**，目的是让你理解 Tool Use（工具调用）的基本概念和流程。
 
-- 后面几周（特别是 Agent 部分）我们会系统学习如何设计工具、处理并行调用、多工具协作等更高级的内容。
+- 后面几周（特别是 Agent 部分）我们会系统学习如何设计工具、处理并行调用、多工具协作、错误处理等更高级的内容。
 - 当前版本仅做演示，实际生产环境还需要更多工程化处理。
 
 ### 为什么需要 Tool Use？
@@ -344,99 +344,88 @@ Tool Use 的核心流程是：
 
 我们将实现一个简单的“查天气”工具，并让模型能够自动调用它。
 
-** 实现步骤 **：
+**实现步骤**：
 
 1. **定义工具函数**（使用 `wttr.in` 免费接口，无需 API Key）
 2. **使用 LangChain 的 `@tool` 装饰器**
 3. **绑定工具到 LLM**
 4. **处理工具调用并返回结果**
 
-### 完整示例代码 (app_with_tool.py)
-
-在 `ai-learning` 文件夹中新建 `app_with_tool.py`，粘贴以下代码：
+### 完整示例代码 (app_with_tool.py) - 已修复版
 
 ```python
-# app_with_tool.py - 简单 Tool Use 示例（查询天气）
+# app_with_tool.py - Step 6 最终修复版（推荐）
 
 import os
 from dotenv import load_dotenv
 import gradio as gr
 from langchain_openai import ChatOpenAI
 from langchain_core.tools import tool
-
-import requests  # 用于调用 wttr.in 接口
+from langchain_core.messages import SystemMessage, HumanMessage, AIMessage, ToolMessage
+import requests
 
 load_dotenv()
 
-# 1. 定义工具：查询天气
+# 1. 定义工具
 @tool
 def get_weather(city: str) -> str:
     """Query current weather information for a specified city."""
     try:
-        # 使用 wttr.in 免费接口（无需 API Key）
         url = f"https://wttr.in/{city}?format=3"
         response = requests.get(url, timeout=5)
-        if response.status_code == 200:
-            return f"{city} 当前天气：{response.text}"
-        else:
-            return f"无法获取 {city} 的天气信息"
+        return f"{city} 当前天气：{response.text}" if response.status_code == 200 else f"无法获取 {city} 的天气信息"
     except Exception as e:
         return f"查询天气时出错：{str(e)}"
 
-# 2. 初始化 LLM 并绑定工具
+# 2. 初始化模型并绑定工具
 llm = ChatOpenAI(
     model="deepseek-v4-flash",
     api_key=os.getenv("DEEPSEEK_API_KEY"),
     base_url="https://api.deepseek.com",
     temperature=0.7,
-).bind_tools([get_weather])   # 绑定工具
+).bind_tools([get_weather])
 
-# 3. 聊天函数（处理工具调用）
-def chat_with_tool(message, history):
-    # 构建完整 Prompt
-    messages = [("system", "You are a helpful assistant that can use tools when needed.")]
-    
-    # 2. 安全处理 history（兼容新版 Gradio）
-    if history:
-        for turn in history:
-            if isinstance(turn, (list, tuple)):
-                if len(turn) >= 2:
-                    user_msg = turn[0]
-                    assistant_msg = turn[1]
-                    messages.append(("user", user_msg))
-                    messages.append(("assistant", assistant_msg))
-                elif len(turn) == 1:
-                    messages.append(("user", turn[0]))
-    
-    messages.append(("user", message))
-    
-    # 调用 LLM
+
+def chat_with_tool(message: str, history: list):
+    # 构建消息列表
+    messages = [SystemMessage(content="你是一个有帮助的助手，必要时会使用工具查询信息。")]
+
+    # 安全处理历史对话
+    for turn in history:
+        if isinstance(turn, (list, tuple)) and len(turn) >= 2:
+            messages.append(HumanMessage(content=turn[0]))
+            messages.append(AIMessage(content=turn[1]))
+
+    # 添加当前用户消息
+    messages.append(HumanMessage(content=message))
+
+    # 第一次调用模型
     response = llm.invoke(messages)
-    
-    # 如果模型输出了工具调用
+
+    # 如果模型需要调用工具
     if response.tool_calls:
         tool_call = response.tool_calls[0]
         tool_name = tool_call["name"]
         tool_args = tool_call["args"]
-        
-        # 执行工具
+
         if tool_name == "get_weather":
             tool_result = get_weather.invoke(tool_args)
-            
-            # 把工具结果返回给模型
+
+            # 把工具结果返回结果
             messages.append(response)
-            messages.append(("tool", tool_result, tool_call["id"]))
-            
+            messages.append(ToolMessage(content=tool_result, tool_call_id=tool_call["id"]))
+
             # 再次调用模型生成最终回答
             final_response = llm.invoke(messages)
             return final_response.content
-    
+
     return response.content
 
+
 # 创建界面
-with gr.Blocks(title="带工具调用的聊天应用") as demo:
-    gr.Markdown("# Step 6: 简单 Tool Use 示例\n模型可以自动调用工具查天气")
-    
+with gr.Blocks(title="Step 6: Tool Use 示例") as demo:
+    gr.Markdown("# Step 6: 简单 Tool Use 示例\n模型可以自动调用工具查询天气")
+
     chatbot = gr.ChatInterface(
         fn=chat_with_tool,
         title="AI 助手（可查天气）",
@@ -449,10 +438,10 @@ demo.launch()
 
 ### 代码重点解释
 
-- `@tool` 装饰器：把普通函数变成可供模型调用的工具
-- `.bind_tools([get_weather])` ：告诉模型它可以使用这个工具
-- `tool_calls` ：模型输出的工具调用信息
-- 我们手动执行工具并把结果返回给模型
+- `SystemMessage / HumanMessage / AIMessage / ToolMessage` ：使用 LangChain 标准消息类，更稳定可靠
+- `history` 处理采用安全解包方式
+- Tool Call 处理流程更清晰
+- 这个版本已修复了之前的 `ValueError` 和 `NotImplementedError`
 
 ** 这个版本的限制 **：
 - 工具调用逻辑是手动处理的
