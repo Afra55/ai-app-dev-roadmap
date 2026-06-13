@@ -75,7 +75,27 @@ DEEPSEEK_API_KEY=sk-你的 DeepSeek API Key
 
 ** 目标 **：验证 API 调用正常，并实现结构化输出功能。
 
-1. 在 `ai-learning` 文件夹中新建 `test_chat.py`，粘贴以下代码：
+### 代码解释（重要）
+
+这段代码做了以下几件事：
+
+1. **加载环境变量** (`load_dotenv()`)：从 `.env` 文件中读取 `DEEPSEEK_API_KEY`。
+2. **创建 LLM 客户端** (`ChatOpenAI`)：使用 LangChain 封装的客户端调用 DeepSeek API。
+   - `base_url` 指向 DeepSeek 的服务器（DeepSeek 兼容 OpenAI 格式）
+   - `model` 指定使用的模型
+3. **Gradio 创建网页界面** (`gr.ChatInterface`)：快速生成一个简单的聊天 Web UI，这就是你看到的网页。
+4. **强制 JSON 输出** (在 Prompt 中)：通过 Prompt 让模型回答时严格按照 JSON 格式输出，而不是随意的文本。
+
+** 为什么会出现网页？**
+
+`demo.launch()` 会启动一个简易的 Web 服务器，并自动打开浏览器。这是 Gradio 提供的功能，用来快速测试聊天应用。
+
+** 为什么返回的是 JSON？**
+
+我们在 `prompt` 里面明确要求了模型严格按照 JSON 格式回答。这是 Prompt 工程的一种常见技巧，叫做 **Structured Output**。
+
+### 代码（已更新为 deepseek-v4-flash）
+
 ```python
 import os
 from dotenv import load_dotenv
@@ -85,7 +105,7 @@ from langchain_openai import ChatOpenAI
 load_dotenv()
 
 llm = ChatOpenAI(
-    model="deepseek-chat",
+    model="deepseek-v4-flash",           # 已更新为最新模型
     api_key=os.getenv("DEEPSEEK_API_KEY"),
     base_url="https://api.deepseek.com",
     temperature=0.7,
@@ -113,7 +133,7 @@ python test_chat.py
 
 ** 常见问题解决 **：
 - API Key 错误：检查 `.env` 文件是否正确保存
-- 模型不存在：确认使用 `"deepseek-chat"`
+- 模型不存在：确认使用 `"deepseek-v4-flash"`
 
 ---
 
@@ -163,7 +183,7 @@ load_dotenv()
 
 def get_llm():
     return ChatOpenAI(
-        model="deepseek-chat",
+        model="deepseek-v4-flash",
         api_key=os.getenv("DEEPSEEK_API_KEY"),
         base_url="https://api.deepseek.com",
         temperature=0.7,
@@ -204,7 +224,7 @@ def call_llm(prompt: str) -> str:
 - 掌握 Prompt 工程核心技巧
 - 初步封装 LLM 调用逻辑
 - 处理 API 调用中的常见错误
-- 具备基本的代码组织和模块化能力
+- 具备基本的代码组练和模块化能力
 
 ---
 
