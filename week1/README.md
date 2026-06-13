@@ -77,14 +77,12 @@ DEEPSEEK_API_KEY=sk-你的 DeepSeek API Key
 
 ### 代码解释（重要）
 
-这段代码做了以下几件事：
+这段代码做以下几件事：
 
 1. **加载环境变量** (`load_dotenv()`)：从 `.env` 文件中读取 `DEEPSEEK_API_KEY`。
 2. **创建 LLM 客户端** (`ChatOpenAI`)：使用 LangChain 封装的客户端调用 DeepSeek API。
-   - `base_url` 指向 DeepSeek 的服务器（DeepSeek 兼容 OpenAI 格式）
-   - `model` 指定使用的模型
-3. **Gradio 创建网页界面** (`gr.ChatInterface`)：快速生成一个简单的聊天 Web UI，这就是你看到的网页。
-4. **强制 JSON 输出** (在 Prompt 中)：通过 Prompt 让模型回答时严格按照 JSON 格式输出，而不是随意的文本。
+3. **Gradio 创建网页界面** (`gr.ChatInterface`)：快速生成一个简单的聊天 Web UI。
+4. **强制 JSON 输出** (在 Prompt 中)：通过 Prompt 让模型回答时严格按照 JSON 格式输出。
 
 ** 为什么会出现网页？**
 
@@ -105,7 +103,7 @@ from langchain_openai import ChatOpenAI
 load_dotenv()
 
 llm = ChatOpenAI(
-    model="deepseek-v4-flash",           # 已更新为最新模型
+    model="deepseek-v4-flash",
     api_key=os.getenv("DEEPSEEK_API_KEY"),
     base_url="https://api.deepseek.com",
     temperature=0.7,
@@ -141,11 +139,10 @@ python test_chat.py
 
 ** 目标 **：深入理解并实践 Prompt 工程中最重要的两种技巧。
 
-** 详细操作 **：
+### 1. 结构化输出练习
 
-1. **结构化输出练习**
-   - 打开 `test_chat.py`
-   - 将 prompt 替换为以下模板：
+将 prompt 替换为以下模板，测试不同问题：
+
 ```python
 prompt = f"""You are a helpful assistant. Please answer the user's question in the following strict JSON format:
 {{"answer": "concise and accurate answer", "reasoning": "brief reasoning", "confidence": "high/medium/low"}}
@@ -153,17 +150,42 @@ prompt = f"""You are a helpful assistant. Please answer the user's question in t
 User question: {message}"""
 ```
 
-   - 测试不同问题，例如：
-     - “说一下你的优点”
-     - “如何有效学习 Python?”
+** 测试题目建议 **：
+- “说一下你的优点”
+- “如何有效学习 Python?”
+- “一个人如何提升写作能力？”
 
-2. **CoT 思维链练习**
-   - 在 prompt 中添加“Let’s think step by step.”
-   - 对比直接回答和先思考再回答的效果。
+### 2. Chain-of-Thought (CoT) 思维链练习（重点）
 
-3. **自己设计 Prompt**
-   - 设计一个让模型输出代码的 Prompt
-   - 设计一个分类任务的 Prompt
+** 为什么你加了“一步一步思考”结果没变？**
+
+很多斶候直接加 `Let’s think step by step` 对简单问题效果不明显，因为：
+- 模型本身已经很强（特别是 deepseek-v4-flash）
+- 任务太简单，模型不需要明显的 CoT 也能答好
+
+** 正确的 CoT 练习方式 **：
+
+1. **使用更复杂的问题**
+   选择需要多步推理的问题，例如：
+   - “一个人月薪 8000 元，每月花费3000元，剩下的钱用来投资，假设每年投资收益 12%，5 年后他能有多少钱？”
+   - “有 3 个盒子，第一个盒子里有 2 个球，第二个盒子里有 3 个球，第三个盒子里有 4 个球。从每个盒子里各取出 1 个球，剩下多少个球？”
+
+2. **在 JSON 中输出思考过程**
+   修改 prompt ，让模型在 `reasoning` 字段里写出思考过程：
+
+```python
+prompt = f"""You are a helpful assistant. Please answer the user's question in the following strict JSON format. Think step by step before giving the final answer.
+{{"answer": "final answer", "reasoning": "detailed step-by-step reasoning", "confidence": "high/medium/low"}}
+
+User question: {message}"""
+```
+
+3. **对比实验**
+   - 版本 A：不加 CoT，直接要求回答
+   - 版本 B：加上 `Think step by step before giving the final answer`
+   - 用同一个复杂问题测试两个版本，对比 `reasoning` 字段的质量和 `answer` 的准确性。
+
+** 建议 **：CoT 在简单问题上效果并不明显，但在需要逻辑推理、计算、多步解决的问题上效果很明显。
 
 ---
 
@@ -214,7 +236,7 @@ def call_llm(prompt: str) -> str:
 
 ---
 
-## 本周完成后将掌握的内容
+## 本周完成后将掌揣的内容
 
 完成第1周后，你将能够：
 
