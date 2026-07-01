@@ -74,7 +74,12 @@ ai-app-dev-roadmap/
 │   ├── app.py                # 完整聊天应用
 │   └── app_with_tool.py      # Tool Use 示例
 ├── week2/
-│   └── README.md
+│   ├── README.md             # 第2周详细步骤
+│   ├── requirements.txt      # 第2周 Python 依赖
+│   ├── ingest.py             # 文档索引
+│   ├── rag_pipeline.py       # RAG 检索与生成
+│   ├── api.py                # FastAPI 服务
+│   └── sample_docs/          # 示例文档
 ├── projects/                 # 项目代码与文档
 ├── docs/                     # 附加参考资料
 └── .gitignore
@@ -86,7 +91,7 @@ ai-app-dev-roadmap/
 
 1. Star 并 Fork 本仓库
 2. Clone 到本地
-3. 进入 `week1/` 目录，按 `week1/README.md` 的「快速开始」安装依赖并配置 API Key
+3. 进入 `week1/` 或 `week2/` 目录，按对应 `README.md` 的「快速开始」安装依赖并配置 API Key
 4. 按照 `weekX/README.md` 完成每周详细任务
 5. 每周提交代码与笔记
 6. 通过 Issues 追踪问题
@@ -100,7 +105,7 @@ ai-app-dev-roadmap/
 详细步骤、代码示例和练习请查看对应周的 README：
 
 - [Week 1: Python + Prompt + DeepSeek API](week1/README.md)
-- Week 2: RAG 实现（即将更新）
+- [Week 2: RAG 实现（本地文档问答 + FastAPI）](week2/README.md)
 - Week 3: 安卓端侧 AI（即将更新）
 - Week 4: 端云协同与 LangGraph（即将更新）
 

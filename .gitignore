@@ -19,3 +19,7 @@ venv.bak/
 # OS
 .DS_Store
 Thumbs.db
+
+# Week 2 generated data
+week2/chroma_db/
+week2/uploaded_docs/
