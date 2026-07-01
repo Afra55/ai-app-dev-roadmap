@@ -1,6 +1,6 @@
 # 第1周：Python 基础 + Prompt 工程 + DeepSeek API 实践
 
-← [路线图](../README.md) · [第一阶段（第 1–4 周）](../week1-4/) · **Week 1**
+← [路线图](../../README.md) · [第一阶段](../README.md) · **Week 1**
 
 ## 学习目标
 
@@ -38,7 +38,7 @@ week1/
 ### 1. 进入目录并安装依赖
 
 ```bash
-cd week1
+cd phase1/week1
 python3 -m venv .venv
 source .venv/bin/activate   # Windows: .venv\Scripts\activate
 pip install -r requirements.txt
@@ -311,9 +311,9 @@ python app_with_tool.py
 
 ### 1. `未找到 DEEPSEEK_API_KEY`
 
-- 确认在 `week1/` 目录下创建了 `.env` 文件（不是 `.env.example`）
+- 确认在 `phase1/week1/` 目录下创建了 `.env` 文件（不是 `.env.example`）
 - 确认变量名为 `DEEPSEEK_API_KEY`，无多余空格或引号
-- 在 `week1/` 目录内运行脚本，或依赖 `llm_utils.py` 自动从本目录加载 `.env`
+- 在 `phase1/week1/` 目录内运行脚本，或依赖 `llm_utils.py` 自动从本目录加载 `.env`
 
 ### 2. 模型不存在 / 404
 

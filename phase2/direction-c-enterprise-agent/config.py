@@ -13,7 +13,8 @@ AUDIT_DB = DATA_DIR / "audit.db"
 SAMPLE_DOCS_DIR = PROJECT_DIR / "sample_docs"
 COLLECTION_NAME = "enterprise_kb"
 
-if str(REPO_ROOT) not in sys.path:
-    sys.path.insert(0, str(REPO_ROOT))
+from common.paths import ensure_repo_on_path
+
+ensure_repo_on_path()
 
 DEPARTMENTS = ("hr", "finance", "it")

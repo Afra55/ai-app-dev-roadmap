@@ -3,7 +3,7 @@
 set -euo pipefail
 
 ROOT="$(cd "$(dirname "$0")/../../.." && pwd)"
-DIR="$ROOT/projects/direction-a-smart-notes"
+DIR="$ROOT/phase2/direction-a-smart-notes"
 
 echo "=== Direction A: Smart Notes ==="
 cd "$DIR"

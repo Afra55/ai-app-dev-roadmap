@@ -1,5 +1,7 @@
 # 智能笔记 App（Direction A）
 
+← [路线图](../../README.md) · [第二阶段](../README.md) · **Direction A**
+
 端云协同智能笔记项目，整合第一阶段 Week 2 RAG、Week 3 端侧模型、Week 4 端云路由。
 
 ## 功能
@@ -12,7 +14,7 @@
 ## 快速开始
 
 ```bash
-cd projects/direction-a-smart-notes
+cd phase2/direction-a-smart-notes
 pip install -r requirements.txt
 python verify_setup.py
 python demo_cli.py --init

@@ -1,6 +1,6 @@
 # RAG 与 Agent 面试题
 
-结合本仓库 `week2/`、`week4/`、`projects/` 回答。
+结合本仓库 `phase1/week2/`、`phase1/week4/`、`phase2/` 回答。
 
 ---
 
@@ -10,13 +10,13 @@
 
 **答**：检索增强生成。先从知识库检索相关文档，再拼进 Prompt 让 LLM 生成答案。解决幻觉、知识过时、私有数据无法训练等问题。
 
-**项目**：`week2/rag_pipeline.py` — 检索 Top-K 块 + RAG Prompt + 来源引用。
+**项目**：`phase1/week2/rag_pipeline.py` — 检索 Top-K 块 + RAG Prompt + 来源引用。
 
 ---
 
 ### 2. 为什么要做 Chunk？chunk_size 怎么选？
 
-**答**：受上下文窗口限制，且检索需要合适粒度。太大检索粗、易带噪声；太小上下文不完整。本仓库默认 `chunk_size=500, overlap=80`（`week2/config.py`），智能笔记用 `400/60`（`projects/direction-a-smart-notes/config.py`）。
+**答**：受上下文窗口限制，且检索需要合适粒度。太大检索粗、易带噪声；太小上下文不完整。本仓库默认 `chunk_size=500, overlap=80`（`phase1/week2/config.py`），智能笔记用 `400/60`（`phase2/direction-a-smart-notes/config.py`）。
 
 **追问**：如何验证？→ 改参数后 `--reindex`，用同一问题对比答案。
 
@@ -36,7 +36,7 @@
 
 **答**：Prompt 明确要求「仅根据参考资料回答，没有则说未找到」；返回来源引用；必要时降低 temperature。
 
-**项目**：`week2/rag_pipeline.py` 的 `RAG_PROMPT`。
+**项目**：`phase1/week2/rag_pipeline.py` 的 `RAG_PROMPT`。
 
 ---
 
@@ -46,7 +46,7 @@
 
 **答**：Reasoning + Acting。模型交替「思考 → 选工具 → 执行 → 再生成」，直到得出最终答案。
 
-**项目**：`week4/agent.py` 使用 `langgraph.prebuilt.create_react_agent`。
+**项目**：`phase1/week4/agent.py` 使用 `langgraph.prebuilt.create_react_agent`。
 
 ---
 
@@ -54,7 +54,7 @@
 
 **答**：Chat 只靠模型参数知识；Agent 可调用外部工具（知识库、API、计算器）获取实时或私有数据。
 
-**项目**：`week4/tools.py` — `search_knowledge_base`、`get_weather`、`calculator`。
+**项目**：`phase1/week4/tools.py` — `search_knowledge_base`、`get_weather`、`calculator`。
 
 ---
 
@@ -62,7 +62,7 @@
 
 **答**：用户提问 → 模型判断是否调用工具 → 输出 tool_call → 执行工具 → 将结果作为 ToolMessage 回传 → 模型生成最终回答。
 
-**项目**：`week1/app_with_tool.py`（入门）、`week4`（完整 Agent）。
+**项目**：`phase1/week1/app_with_tool.py`（入门）、`phase1/week4`（完整 Agent）。
 
 ---
 

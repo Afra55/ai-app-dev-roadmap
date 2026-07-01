@@ -1,5 +1,7 @@
 # 企业内部智能助手（Direction C · 精简版）
 
+← [路线图](../../README.md) · [第二阶段](../README.md) · **Direction C**
+
 ## 功能
 
 - 分部门知识库检索（HR / Finance / IT）
@@ -10,7 +12,7 @@
 ## 快速开始
 
 ```bash
-cd projects/direction-c-enterprise-agent
+cd phase2/direction-c-enterprise-agent
 pip install -r requirements.txt
 python verify_setup.py
 uvicorn api:app --reload --port 8030

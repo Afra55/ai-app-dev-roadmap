@@ -27,13 +27,13 @@ run_check() {
   cd "$ROOT"
 }
 
-run_check "Week 1" "$ROOT/week1"
-run_check "Week 2" "$ROOT/week2"
-run_check "Week 3" "$ROOT/week3"
-run_check "Week 4" "$ROOT/week4"
-run_check "Direction A" "$ROOT/projects/direction-a-smart-notes"
-run_check "Direction B" "$ROOT/projects/direction-b-bank-assistant/backend"
-run_check "Direction C" "$ROOT/projects/direction-c-enterprise-agent"
+run_check "Week 1" "$ROOT/phase1/week1"
+run_check "Week 2" "$ROOT/phase1/week2"
+run_check "Week 3" "$ROOT/phase1/week3"
+run_check "Week 4" "$ROOT/phase1/week4"
+run_check "Direction A" "$ROOT/phase2/direction-a-smart-notes"
+run_check "Direction B" "$ROOT/phase2/direction-b-bank-assistant/backend"
+run_check "Direction C" "$ROOT/phase2/direction-c-enterprise-agent"
 
 echo ""
 echo "========================================"

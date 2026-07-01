@@ -3,7 +3,7 @@
 set -euo pipefail
 
 ROOT="$(cd "$(dirname "$0")/../../.." && pwd)"
-DIR="$ROOT/projects/direction-c-enterprise-agent"
+DIR="$ROOT/phase2/direction-c-enterprise-agent"
 
 echo "=== Direction C: Enterprise Agent ==="
 cd "$DIR"

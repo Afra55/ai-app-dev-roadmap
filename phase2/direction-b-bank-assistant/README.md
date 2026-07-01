@@ -1,5 +1,7 @@
 # 银行智能客服（Direction B · 精简版）
 
+← [路线图](../../README.md) · [第二阶段](../README.md) · **Direction B**
+
 > 教学演示项目，非真实金融业务。
 
 ## 功能
@@ -11,7 +13,7 @@
 ## 快速开始
 
 ```bash
-cd projects/direction-b-bank-assistant/backend
+cd phase2/direction-b-bank-assistant/backend
 pip install -r requirements.txt
 python verify_setup.py
 uvicorn api:app --reload --port 8020

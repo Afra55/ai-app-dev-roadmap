@@ -3,7 +3,7 @@
 set -euo pipefail
 
 ROOT="$(cd "$(dirname "$0")/../../.." && pwd)"
-DIR="$ROOT/projects/direction-b-bank-assistant/backend"
+DIR="$ROOT/phase2/direction-b-bank-assistant/backend"
 
 echo "=== Direction B: Bank Assistant（教学演示）==="
 cd "$DIR"

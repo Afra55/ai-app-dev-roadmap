@@ -1,6 +1,6 @@
 # 第3周：安卓端侧 AI（离线 Qwen2.5 聊天）
 
-← [路线图](../README.md) · [第一阶段（第 1–4 周）](../week1-4/) · **Week 3**
+← [路线图](../../README.md) · [第一阶段](../README.md) · **Week 3**
 
 ## 学习目标
 
@@ -35,7 +35,7 @@ week3/
 ### 1. 安装依赖
 
 ```bash
-cd week3
+cd phase1/week3
 python3 -m venv .venv
 source .venv/bin/activate
 pip install -r requirements.txt
@@ -114,7 +114,7 @@ answer = llm.generate("你好")
 
 打开 Android Studio：
 
-1. **Open** → 选择 `week3/android-app`
+1. **Open** → 选择 `phase1/week3/android-app`
 2. 等待 Gradle Sync 完成
 3. 运行到模拟器或真机
 

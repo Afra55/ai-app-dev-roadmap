@@ -42,7 +42,7 @@
 ## GitHub 仓库整理建议
 
 1. **Pin 本仓库**到你的 GitHub 主页
-2. 根 README 写清学习路径：`week1–4` → `projects` → `phase3`
+2. 根 README 写清学习路径：`phase1` → `projects` → `phase3`
 3. 主项目 README 顶部增加：
    - 演示命令
    - 架构图（已有 mermaid 可复用）

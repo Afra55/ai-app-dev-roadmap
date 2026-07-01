@@ -1,6 +1,6 @@
 # 端云协同与端侧 AI 面试题
 
-结合 `week3/`、`week4/`、`projects/direction-a-smart-notes/`。
+结合 `phase1/week3/`、`phase1/week4/`、`phase2/direction-a-smart-notes/`。
 
 ---
 
@@ -10,7 +10,7 @@
 
 **答**：按任务复杂度、隐私、成本将请求分配到端侧小模型或云端大模型，必要时走 Agent 工具链。
 
-**项目**：`week4/router.py` — `local` / `cloud` / `agent` 三路路由。
+**项目**：`phase1/week4/router.py` — `local` / `cloud` / `agent` 三路路由。
 
 ---
 
@@ -21,7 +21,7 @@
 | 短问候、简单确认 | 长文本分析、复杂推理 | 需工具：天气、计算、知识库 |
 | 弱网兜底 | 高质量生成 | 多步工具协作 |
 
-**项目**：`week4/settings.py` 关键词规则；智能笔记 `chat_service.py` 叠加笔记 RAG。
+**项目**：`phase1/week4/settings.py` 关键词规则；智能笔记 `chat_service.py` 叠加笔记 RAG。
 
 ---
 
@@ -52,7 +52,7 @@
 | 隐私好 | 包体大、耗电 |
 | 省 API 成本 | 真机集成复杂（MLC/LiteRT） |
 
-**项目**：`week3/local_llm.py` — Mock 与 Qwen2.5-0.5B。
+**项目**：`phase1/week3/local_llm.py` — Mock 与 Qwen2.5-0.5B。
 
 ---
 
@@ -60,13 +60,13 @@
 
 **答**：隔离推理实现，UI 层不感知 Mock 还是真实 MLC 模型，便于渐进式集成。
 
-**项目**：`week3/android-app/.../OnDeviceLLM.kt`。
+**项目**：`phase1/week3/android-app/.../OnDeviceLLM.kt`。
 
 ---
 
 ### 7. 真机如何接入 Qwen2.5？
 
-**答**（概览）：MLC LLM 或 LiteRT-LM 量化模型 → 放入 assets → 实现 `OnDeviceLLM` → 替换 `MockOnDeviceLLM`。详见 `week3/README.md` Step 5。
+**答**（概览）：MLC LLM 或 LiteRT-LM 量化模型 → 放入 assets → 实现 `OnDeviceLLM` → 替换 `MockOnDeviceLLM`。详见 `phase1/week3/README.md` Step 5。
 
 ---
 

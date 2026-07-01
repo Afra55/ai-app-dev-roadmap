@@ -9,7 +9,7 @@ import pytest
 from common.rag import load_documents, split_documents
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
-SAMPLE_DOCS = REPO_ROOT / "week2" / "sample_docs"
+SAMPLE_DOCS = REPO_ROOT / "phase1" / "week2" / "sample_docs"
 
 
 def test_load_documents_finds_sample_files():
