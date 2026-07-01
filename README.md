@@ -67,7 +67,12 @@
 ai-app-dev-roadmap/
 ├── README.md                 # 高层概览与导航
 ├── week1/
-│   └── README.md             # 第1周详细步骤
+│   ├── README.md             # 第1周详细步骤
+│   ├── requirements.txt      # 第1周 Python 依赖
+│   ├── llm_utils.py          # LLM 封装
+│   ├── test_chat.py          # 结构化输出示例
+│   ├── app.py                # 完整聊天应用
+│   └── app_with_tool.py      # Tool Use 示例
 ├── week2/
 │   └── README.md
 ├── projects/                 # 项目代码与文档
@@ -81,9 +86,10 @@ ai-app-dev-roadmap/
 
 1. Star 并 Fork 本仓库
 2. Clone 到本地
-3. 按照 `weekX/README.md` 完成每周详细任务
-4. 每周提交代码与笔记
-5. 通过 Issues 追踪问题
+3. 进入 `week1/` 目录，按 `week1/README.md` 的「快速开始」安装依赖并配置 API Key
+4. 按照 `weekX/README.md` 完成每周详细任务
+5. 每周提交代码与笔记
+6. 通过 Issues 追踪问题
 
 ** 建议 **：主要参考 `weekX/README.md` 进行学习。
 

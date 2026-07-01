@@ -4,17 +4,92 @@
 
 完成本周学习后，你将能够：
 
-- 快速掌握 Python 异步编程和类型注解
+- 快速掌握 Python 虚拟环境与依赖管理
 - 掌握 Prompt 工程的核心技巧和实际应用
 - 使用 DeepSeek API 构建简单的 LLM 应用
-- 初步封装 LLM 调用逻辑
-- 处理 API 调用中的常见错误
+- 封装 LLM 调用逻辑并处理常见错误
+- 初步了解 Tool Use（工具调用）的基本流程
 
 ## 本周资源
 
-- Datawhale 《动手学大模型应用开发》 Task 1-2
+- [Datawhale《动手学大模型应用开发》](https://github.com/datawhalechina/llm-universe)
 - B站黑马程序员《2026 大模型应用开发》前 10 集
-- DeepSeek 官方文档
+- [DeepSeek 官方 API 文档](https://api-docs.deepseek.com/)
+
+---
+
+## 快速开始（推荐）
+
+本目录已包含可直接运行的示例代码：
+
+```text
+week1/
+├── .env.example          # API Key 配置模板
+├── requirements.txt      # Python 依赖
+├── llm_utils.py          # 共享 LLM 封装（Step 4）
+├── test_chat.py          # 结构化输出聊天（Step 2）
+├── app.py                # 带历史记录的完整应用（Step 5）
+├── app_with_tool.py      # Tool Use 入门（Step 6）
+└── verify_setup.py       # 本地环境检查脚本
+```
+
+### 1. 进入目录并安装依赖
+
+```bash
+cd week1
+python3 -m venv .venv
+source .venv/bin/activate   # Windows: .venv\Scripts\activate
+pip install -r requirements.txt
+```
+
+> 如果你使用 conda，也可以执行：
+>
+> ```bash
+> conda create -n llm-dev python=3.10 -y
+> conda activate llm-dev
+> pip install -r requirements.txt
+> ```
+
+### 2. 配置 API Key
+
+```bash
+cp .env.example .env
+```
+
+编辑 `.env`，填入你的 DeepSeek API Key（以 `sk-` 开头）：
+
+```env
+DEEPSEEK_API_KEY=sk-你的DeepSeekAPIKey
+```
+
+获取地址：https://platform.deepseek.com/api_keys
+
+> **安全提示**：`.env` 已被 `.gitignore` 忽略，请勿将 API Key 提交到 Git 仓库。
+
+### 3. 运行环境检查
+
+```bash
+python verify_setup.py
+```
+
+看到「依赖检查通过，已检测到 DEEPSEEK_API_KEY」即可继续。
+
+### 4. 按步骤运行示例
+
+```bash
+python test_chat.py        # Step 2
+python app.py              # Step 5
+python app_with_tool.py    # Step 6
+```
+
+浏览器会自动打开 Gradio 界面。若端口被占用，可在代码中将 `demo.launch()` 改为 `demo.launch(server_port=7861)`。
+
+### 模型说明
+
+本仓库默认使用官方推荐的 **`deepseek-v4-flash`**（见 [DeepSeek API 文档](https://api-docs.deepseek.com/)）。
+
+- 旧别名 `deepseek-chat` / `deepseek-reasoner` 将于 **2026-07-24** 停用，请勿在新代码中使用。
+- 如需更强推理能力，可在 `llm_utils.py` 中将 `DEFAULT_MODEL` 改为 `deepseek-v4-pro`。
 
 ---
 
@@ -22,465 +97,276 @@
 
 ### Step 1: 搭建 Python 虚拟环境并获取 DeepSeek API Key
 
-** 目标 **：创建独立的学习环境，安全管理 API Key。
+**目标**：创建独立的学习环境，安全管理 API Key。
 
-1. 打开终端，执行以下命令创建并激活环境：
+请直接按照上方「快速开始」完成环境搭建。完成后用以下命令验证 `.env` 是否生效：
+
 ```bash
-conda create -n llm-dev python=3.10 -y
-conda activate llm-dev
+python -c "from llm_utils import _get_api_key; print('Key prefix:', _get_api_key()[:8])"
 ```
 
-   成功后终端前面会显示 `(llm-dev)`。
-
-2. 安装本周必要的库：
-```bash
-pip install python-dotenv gradio langchain-openai
-```
-
-3. 获取 DeepSeek API Key：
-   - 访问 https://platform.deepseek.com/api_keys
-   - 登录并创建新的 API Key
-   - 复制 Key（以 `sk-` 开头）
-
-4. 在本地新建文件夹 `ai-learning`（建议放在 Desktop 或 Documents）。
-
-5. 在该文件夹中新建 `.env` 文件（文件名必须以点开头），用文本编辑器打开并粘贴以下内容：
-```env
-DEEPSEEK_API_KEY=sk-你的 DeepSeek API Key
-```
-
-   保存文件。
-
-** 验证 `.env` 文件 **：
-
-`.env` 文件不会自动加载到 shell 环境中，它是供 Python 程序通过 `python-dotenv` 读取的。
-
-** 推荐验证方式 **：
-
-- 查看文件内容：
-  ```bash
-  cat .env
-  ```
-
-- 用 Python 验证（最准确）：
-  ```bash
-  python -c "from dotenv import load_dotenv; import os; load_dotenv(); print('Key loaded:', bool(os.getenv('DEEPSEEK_API_KEY'))); print('Key prefix:', os.getenv('DEEPSEEK_API_KEY')[:8] if os.getenv('DEEPSEEK_API_KEY') else 'Not found')"
-  ```
-
-如果输出显示 `Key loaded: True`，则说明设置成功。
+若输出 `Key prefix: sk-xxxxx`，说明配置成功。
 
 ---
 
 ### Step 2: 创建并运行第一个结构化输出聊天应用
 
-** 目标 **：验诉 API 调用正常，并实现结构化输出功能。
+**目标**：验证 API 调用正常，并实现结构化输出功能。
 
-### 代码解释（重要）
+**运行**：
 
-这段代码做以下几件事：
-
-1. **加载环境变量** (`load_dotenv()`)：从 `.env` 文件中读取 `DEEPSEEK_API_KEY`。
-2. **创建 LLM 客户端** (`ChatOpenAI`)：使用 LangChain 封装的客户端调用 DeepSeek API。
-3. **Gradio 创建网页界面** (`gr.ChatInterface`)：快速生成一个简单的聊天 Web UI。
-4. **强制 JSON 输出** (在 Prompt 中)：通过 Prompt 让模型回答时严格按照 JSON 格式输出。
-
-** 为什义返回的是 JSON？**
-
-我们在 `prompt` 里面明确要求严格按照 JSON 格式回答。这是 Prompt 工程的一种常见技巧，叫做 **Structured Output**。
-
-### 代码（已更新为 deepseek-v4-flash）
-
-```python
-import os
-from dotenv import load_dotenv
-import gradio as gr
-from langchain_openai import ChatOpenAI
-
-load_dotenv()
-
-llm = ChatOpenAI(
-    model="deepseek-v4-flash",
-    api_key=os.getenv("DEEPSEEK_API_KEY"),
-    base_url="https://api.deepseek.com",
-    temperature=0.7,
-)
-
-def chat(message, history):
-    prompt = f"""Please answer the user's question strictly in JSON format with the following structure:
-{{"answer": "Your detailed answer", "confidence": "high/medium/low"}}
-
-User question: {message}"""
-    
-    response = llm.invoke(prompt)
-    return response.content
-
-demo = gr.ChatInterface(chat, title="DeepSeek Structured Chat Demo")
-demo.launch()
-```
-
-2. 在终端运行：
 ```bash
 python test_chat.py
 ```
 
-3. 浏览器会自动打开界面。输入问题测试，观寏输出是否为有效 JSON 格式。
+**代码说明**（`test_chat.py`）：
 
-** 常见问题解决 **：
-- API Key 错误：检查 `.env` 文件是否正确保存
-- 模型不存在：确认使用 `"deepseek-v4-flash"`
+1. 通过 `llm_utils.get_llm()` 创建 DeepSeek 客户端
+2. 在 Prompt 中要求模型严格返回 JSON
+3. 使用 Gradio `ChatInterface` 快速生成 Web 聊天界面
+
+**为什么返回 JSON？**
+
+这是 Prompt 工程中的 **Structured Output（结构化输出）** 技巧。固定输出格式后，程序更容易解析模型结果，也是后续 RAG 和 Agent 的基础。
+
+**核心代码片段**：
+
+```python
+from llm_utils import get_llm
+
+llm = get_llm()
+prompt = """Please answer strictly in JSON:
+{"answer": "...", "confidence": "high/medium/low"}
+User question: ..."""
+response = llm.invoke(prompt)
+```
 
 ---
 
 ### Step 3: Prompt 工程核心技巧实践
 
-** 目标 **：理解 Prompt 工程的作用和价值，掌握实际工作中最常用、最有效的核心技巧。
+**目标**：理解 Prompt 工程的作用，掌握实际工作中最常用的核心技巧。
 
-### Prompt 工程是做什么的？
+#### Prompt 工程是做什么的？
 
-**Prompt Engineering（提示词工程）** 是指通过设计、优化、组合提示词（Prompt），使大模型输出更准确、更符合预期、更安全的技能。
+**Prompt Engineering（提示词工程）** 是通过设计、优化提示词，使大模型输出更准确、更符合预期、更安全的技能。简单说，就是「教会 AI 怎么思考和回答」。
 
-简单来说，就是“** 教会 AI 怎么思考和回答 **”。
+#### 主要用途
 
-### Prompt 工程主要用来做什么？
+| 目的 | 说明 | 常见场景 |
+|------|------|----------|
+| 提升答案质量 | 减少错误、幻觉、偏差 | 问答、总结、分析 |
+| 控制输出格式 | 让模型按固定格式输出 | 结构化输出、Agent 工具调用 |
+| 步骤推理 | 提升复杂任务正确率 | 数学、逻辑、多步问题 |
+| 控制风格 | 指定角色、语气 | 客服、写作、教学 |
+| 减少幻觉 | 通过限制和验证减少编造 | 业务安全场景 |
 
-| 目的               | 说明                                   | 常见场景               |
-|-----------------------|---------------------------------------------|----------------------------------|
-| 提升答案质量   | 减少错误、假象、偏差           | 问答、总结、分析     |
-| 控制输出格式   | 让模型按固定格式输出（JSON等） | 结构化输出、Agent工具调用 |
-| 让模型步骤推理 | 提升复杂任务的正确率           | 数学、逻辑、多步解决 |
-| 控制风格和要求 | 让 AI 按指定角色、语气回答     | 客服、写作、教学等     |
-| 减少幻觉           | 通过限制和验证减少编造内容     | 业务场景安全性要求   |
+#### Week 1 必须掌握的 6 个技巧
 
-### 必须掌握的 Prompt 核心技巧（Week 1 重点）
+1. **角色设定（Role / Persona）**
+   ```text
+   You are a senior software architect with 15 years of experience.
+   ```
 
-#### 1. **角色设定（Role / Persona）**
-给 AI 定义一个具体角色，能大大提升回答质量。
+2. **明确指令 + 限制（Clear Instructions + Constraints）**
+   ```text
+   Please answer in Chinese. Keep the answer within 150 words.
+   ```
 
-```text
-You are a senior software architect with 15 years of experience in backend systems.
-```
+3. **思维链（Chain-of-Thought, CoT）**
+   ```text
+   Think step by step before giving the final answer.
+   ```
 
-#### 2. **明确指令 + 限制（Clear Instructions + Constraints）**
-要求越具体越好，并给出明确的限制条件。
+4. **结构化输出（Structured Output）**
+   ```text
+   Respond strictly in JSON: {"answer": "...", "confidence": "high/medium/low"}
+   ```
 
-```text
-Please answer the question in Chinese. Keep the answer within 150 words. Do not mention that you are an AI.
-```
+5. **示例引导（Few-shot Prompting）**：给出 1~3 个示例让模型模仿
 
-#### 3. **思维链（Chain-of-Thought, CoT）**
-让模型先思考再回答，对复杂问题效果显著。
+6. **分隔符与格式化**：使用 `"""`、`<task>` 等分隔不同部分
 
-```text
-Think step by step before giving the final answer.
-```
+#### Prompt 必须用英文吗？
 
-#### 4. **结构化输出（Structured Output）**
-强制模型按 JSON、列表等固定格式输出，是做 Agent 和 RAG 的基础。
+不一定。DeepSeek、Qwen 等模型中文能力很强，业务场景用中文完全可行。英文在复杂推理、最新研究技巧、国际项目中有时更精准。建议两者都能掌握。
 
-```text
-Please respond strictly in the following JSON format:
-{"answer": "...", "confidence": "high/medium/low"}
-```
+#### Step 3 实践建议
 
-#### 5. **示例引导（Few-shot Prompting）**
-给出 1~3 个示例，让模型模仿格式和逻辑。
-
-#### 6. **分隔符与格式化**
-使用 ``` 、""" 、<task> 等分隔符，让模型更容易区分不同部分。
-
-### Prompt 必须用英文吗？
-
-**不一定必须用英文**。
-
-- 现在的主流模型（DeepSeek、Qwen、GPT-4o 等）对中文的理解和生成能力已经很强。
-- 用中文写 Prompt 完全可以，特别是做业务场景时更方便。
-- 但是，英文 Prompt 在以下情况下更有优势：
-  - 需要更精准的控制和复杂推理时
-  - 使用最新的技术技巧（很多研究是英文）
-  - 做国际项目或与外国模型交互时
-
-** 建议 **：
-- 日常使用中文 Prompt 就可以
-- 重要任务或需要高质量输出时，尝试用英文 Prompt
-- 最理想状态是两者都能掌握
-
-### Step 3 实践建议
-
-1. 每次写 Prompt 都尝试加上 **角色 + 明确指令 + CoT + 结构化输出**
-2. 多做 A/B 对比实验（加 CoT vs 不加 CoT）
-3. 把好的 Prompt 保存起来，形成自己的 Prompt 库
+1. 每次写 Prompt 尝试组合：**角色 + 明确指令 + CoT + 结构化输出**
+2. 做 A/B 对比（加 CoT vs 不加 CoT）
+3. 把效果好的 Prompt 保存成自己的 Prompt 库
 
 ---
 
 ### Step 4: 封装 LLM 调用函数
 
-** 目标 **：学会基本的代码封装思路，并添加错误处理。
+**目标**：学会代码封装思路，并添加错误处理。
 
-** 详细操作 **：
+本步骤对应 `llm_utils.py`，所有示例脚本都复用该模块：
 
-1. 新建 `llm_utils.py`，粘贴以下代码：
 ```python
-import os
-from dotenv import load_dotenv
-from langchain_openai import ChatOpenAI
+from llm_utils import get_llm, call_llm
 
-load_dotenv()
+# 方式一：直接获取客户端
+llm = get_llm()
+response = llm.invoke("你好")
 
-def get_llm():
-    return ChatOpenAI(
-        model="deepseek-v4-flash",
-        api_key=os.getenv("DEEPSEEK_API_KEY"),
-        base_url="https://api.deepseek.com",
-        temperature=0.7,
-    )
-
-def call_llm(prompt: str) -> str:
-    llm = get_llm()
-    try:
-        response = llm.invoke(prompt)
-        return response.content
-    except Exception as e:
-        return f"Error: {str(e)}"
+# 方式二：封装好的调用函数（含错误处理）
+answer = call_llm("你好")
 ```
 
-2. 修改 `test_chat.py` 引入并使用该函数。
+**设计要点**：
 
-3. 测试错误处理：故意输入错误 Key 观察错误信息。
+- API Key 从 `.env` 读取，不硬编码
+- `get_llm()` 统一模型名、`base_url`、`temperature`
+- `call_llm()` 捕获异常并返回可读错误信息
+
+**自测**：故意把 `.env` 中的 Key 改错，运行 `python -c "from llm_utils import call_llm; print(call_llm('hi'))"`，应看到 `Error: ...` 而非程序崩溃。
 
 ---
 
 ### Step 5: 集成完整简单应用（带对话历史记录）
 
-** 目标 **：将前面所学内容集成到一个完整的可复用应用中，并添加对话历史记录功能。
+**目标**：将前面所学集成到完整可复用应用，并支持多轮对话。
 
-** Step 5 详细实施步骤 **：
+**运行**：
 
-1. **创建 `app.py` 文件**
-2. **引入之前的 `llm_utils.py`**
-3. **使用 Gradio 支持对话历史**
-4. **添加系统提示词**
-5. **测试完整功能**
-
-### 完整示例代码（带详细注释 + 兼容新版 Gradio）
-
-```python
-# app.py - 第1周最终集成应用
-
-import os                                   # 导入 os 模块，用于读取环境变量
-from dotenv import load_dotenv             # 导入 dotenv，用于加载 .env 文件
-import gradio as gr                         # 导入 Gradio，用于快速构建 Web 界面
-from llm_utils import call_llm             # 导入我们自己封装的 LLM 调用函数
-
-# 加载 .env 文件中的环境变量（包含 API Key）
-load_dotenv()
-
-# 定义系统提示词（让模型知道自己的角色）
-SYSTEM_PROMPT = """You are a helpful and friendly AI assistant. 
-Always answer in Chinese unless the user asks in another language.
-Be concise but informative."""
-
-# 主聊天函数
-def chat(message, history):
-    """
-    用户发送消息时调用的主函数
-    
-    Args:
-        message: 用户当前输入的消息
-        history: Gradio 自动传入的对话历史
-    
-    Returns:
-        模型的回答
-    """
-    
-    # 1. 构建完整的 Prompt，包含系统提示词和历史对话
-    full_prompt = SYSTEM_PROMPT + "\n\n"
-    
-    # 2. 安全处理 history（兼容新版 Gradio）
-    if history:
-        for turn in history:
-            if isinstance(turn, (list, tuple)):
-                if len(turn) >= 2:
-                    user_msg = turn[0]
-                    assistant_msg = turn[1]
-                    full_prompt += f"User: {user_msg}\nAssistant: {assistant_msg}\n\n"
-                elif len(turn) == 1:
-                    full_prompt += f"User: {turn[0]}\n\n"
-    
-    # 3. 添加当前用户问题
-    full_prompt += f"User: {message}\nAssistant:"
-    
-    # 4. 调用 LLM 获取回答
-    response = call_llm(full_prompt)
-    
-    # 5. 返回模型的回答
-    return response
-
-# 创建 Gradio 界面
-with gr.Blocks(title="第1周完整聊天应用") as demo:
-    gr.Markdown("# 第1周完整聊天应用\n带对话历史记录的简单 AI 聊天应用")
-    
-    # 创建聊天组件
-    chatbot = gr.ChatInterface(
-        fn=chat,                           # 使用上面定义的 chat 函数
-        title="AI 助手", 
-        description="支持多轮对话",
-        examples=["你好", "今天天气怎么样？", "简单介绍一下自己"]
-    )
-
-# 启动应用
-demo.launch()
+```bash
+python app.py
 ```
 
-### 代码重点解释：
+**代码说明**（`app.py`）：
 
-- `history` 参数：Gradio 会自动传入之前的对话历史
-- **兼容处理**：新版 Gradio 中 `history` 可能是 tuple 或 list，元素数量可能不是固定 2 个，所以采用 `if len(turn) >= 2` 进行安全解包
-- `SYSTEM_PROMPT`：系统提示词，用来控制模型的行为风格
-- `gr.ChatInterface`：Gradio 提供的高级聊天组件，自动支持历史记录和显示
+- `SYSTEM_PROMPT`：控制系统提示词与回答风格
+- `_format_history()`：兼容 Gradio 5 的 `messages` 格式历史记录
+- `call_llm()`：统一调用入口
 
-** 建议 **：
-- 先运行以上代码，体验对话历史功能
-- 尝试多轮对话，观寏模型是否能记住之前的内容
-- 可以尝试修改 `SYSTEM_PROMPT` 来改变 AI 的回答风格
+**建议练习**：
+
+1. 多轮对话，观察模型是否记住上下文
+2. 修改 `SYSTEM_PROMPT`，体验不同回答风格
+3. 尝试加入 CoT 提示词，对比回答质量
 
 ---
 
-### Step 6: 简单工具调用（Tool Use / Function Calling）入门
+### Step 6: 简单工具调用（Tool Use）入门
 
-** 目标 **：让模型能够主加调用外部工具（以查询天气为例），体验 Tool Use 的基本流程。
+**目标**：让模型能够调用外部工具（以查询天气为例），理解 Tool Use 基本流程。
 
-** 重要说明 **：
+**运行**：
 
-这个 Step **只是一个非常简化的入门示例**，目的是让你理解 Tool Use（工具调用）的基本概念和流程。
-
-- 后面几周（特别是 Agent 部分）我们会系统学习如何设计工具、处理并行调用、多工具协作、错误处理等更高级的内容。
-- 当前版本仅做演示，实际生产环境还需要更多工程化处理。
-
-### 为什么需要 Tool Use？
-
-当用户问“今天北京天气怎么样？”时，模型本身没有实时数据。它需要一个**工具**去获取信息，然后再基于工具返回的结果生成回答。
-
-Tool Use 的核心流程是：
-1. 模型判断需要调用工具
-2. 输出工具调用请求（Tool Call）
-3. 我们执行工具并获取结果
-4. 把工具结果返回给模型
-5. 模型基于工具结果生成最终回答
-
-### Step 6 实现思路
-
-我们将实现一个简单的“查天气”工具，并让模型能够自动调用它。
-
-**实现步骤**：
-
-1. **定义工具函数**（使用 `wttr.in` 免费接口，无需 API Key）
-2. **使用 LangChain 的 `@tool` 装饰器**
-3. **绑定工具到 LLM**
-4. **处理工具调用并返回结果**
-
-### 完整示例代码 (app_with_tool.py) - 已修复版
-
-```python
-# app_with_tool.py - Step 6 最终修复版（推荐）
-
-import os
-from dotenv import load_dotenv
-import gradio as gr
-from langchain_openai import ChatOpenAI
-from langchain_core.tools import tool
-import requests
-
-load_dotenv()
-
-# 1. 定义工具
-@tool
-def get_weather(city: str) -> str:
-    """Query current weather information for a specified city."""
-    try:
-        url = f"https://wttr.in/{city}?format=3"
-        response = requests.get(url, timeout=5)
-        return f"{city} 当前天气：{response.text}" if response.status_code == 200 else f"无法获取 {city} 的天气信息"
-    except Exception as e:
-        return f"查询天气时出错：{str(e)}"
-
-# 2. 初始化模型并绑定工具
-llm = ChatOpenAI(
-    model="deepseek-v4-flash",
-    api_key=os.getenv("DEEPSEEK_API_KEY"),
-    base_url="https://api.deepseek.com",
-    temperature=0.7,
-).bind_tools([get_weather])
-
-
-def chat_with_tool(message: str, history: list):
-    # 第一次调用，让模型判断是否需要使用工具
-    response = llm.invoke(message)
-
-    # 如果模型决定调用工具
-    if response.tool_calls:
-        tool_call = response.tool_calls[0]
-        tool_name = tool_call["name"]
-        tool_args = tool_call["args"]
-
-        if tool_name == "get_weather":
-            tool_result = get_weather.invoke(tool_args)
-
-            # 重新构造 Prompt，把工具结果告诉模型
-            final_prompt = f"""User question: {message}
-
-Tool result: {tool_result}
-
-Please give the final answer based on the tool result."""
-
-            final_response = llm.invoke(final_prompt)
-            return final_response.content
-
-    return response.content
-
-
-# 创建界面
-with gr.Blocks(title="Step 6: Tool Use 示例") as demo:
-    gr.Markdown("# Step 6: 简单 Tool Use 示例\n模型可以自动调用工具查询天气")
-
-    chatbot = gr.ChatInterface(
-        fn=chat_with_tool,
-        title="AI 助手（可查天气）",
-        examples=["北京现在天气怎么样？", "上海今天会下雨吗？"]
-    )
-
-# 启动
-demo.launch()
+```bash
+python app_with_tool.py
 ```
 
-### 代码重点解释
+输入「北京现在天气怎么样？」测试工具调用。
 
-- 这个版本更稳定、更容易理解
-- 避免了复杂的消息历史管理
-- 依然能体现 Tool Use 的核心思想：模型自动判断需要工具 → 执行工具 → 把结果反馈结果结果结果结果结果结果结果结果结果结果结果结果结果结果结果结果结果结果结果结果结果结果结果结果结果结果结果结果结果结果结果结果结果结果结果
+> **说明**：这是简化的入门示例，用于理解「模型判断 → 调用工具 → 返回结果 → 生成回答」的流程。完整的 Agent 设计（多工具协作、错误重试、并行调用等）将在第 4 周用 LangGraph 系统学习。
 
-** 这个版本的限制 **：
-- 工具调用逻辑是简化的
-- 没有完整的多轮对话历史支持
+#### 为什么需要 Tool Use？
 
-这些高级功能会在后面几周的 Agent 学习中详细讳解。
+模型本身没有实时数据。当用户问天气时，需要调用外部 API 获取信息，再基于结果生成回答。
+
+#### 核心流程
+
+1. 模型判断需要调用工具
+2. 输出工具调用请求（Tool Call）
+3. 执行工具并获取结果
+4. 将工具结果返回给模型
+5. 模型生成最终回答
+
+#### 实现要点（`app_with_tool.py`）
+
+- 使用 `@tool` 装饰器定义 `get_weather`（基于免费 `wttr.in` 接口，无需额外 API Key）
+- 使用 `bind_tools()` 将工具绑定到 LLM
+- 使用 LangChain 的 `HumanMessage` / `ToolMessage` 传递工具结果
+
+**当前版本的限制**：
+
+- 仅演示单工具、单轮工具调用
+- 未覆盖完整多轮 Agent 状态管理
+
+这些会在后续 Agent 章节深入学习。
+
+---
+
+## 本周验收清单
+
+完成以下检查项，即表示第 1 周学习达标：
+
+- [ ] 成功创建虚拟环境并安装 `requirements.txt` 中的依赖
+- [ ] `python verify_setup.py` 通过，且能检测到 API Key
+- [ ] `python test_chat.py` 能打开页面并返回 JSON 风格回答
+- [ ] 能解释 Prompt 工程中至少 4 种核心技巧
+- [ ] `python app.py` 支持多轮对话且上下文连贯
+- [ ] `python app_with_tool.py` 能正确查询城市天气
+- [ ] 理解 `llm_utils.py` 的封装作用，能独立修改 `SYSTEM_PROMPT`
+
+---
+
+## 常见问题
+
+### 1. `未找到 DEEPSEEK_API_KEY`
+
+- 确认在 `week1/` 目录下创建了 `.env` 文件（不是 `.env.example`）
+- 确认变量名为 `DEEPSEEK_API_KEY`，无多余空格或引号
+- 在 `week1/` 目录内运行脚本，或依赖 `llm_utils.py` 自动从本目录加载 `.env`
+
+### 2. 模型不存在 / 404
+
+- 确认使用 `deepseek-v4-flash` 或 `deepseek-v4-pro`
+- 查阅 [官方文档](https://api-docs.deepseek.com/) 获取最新模型列表
+
+### 3. API Key 无效 / 401
+
+- 检查 Key 是否完整复制（以 `sk-` 开头）
+- 确认 DeepSeek 账户有余额且 Key 未过期
+
+### 4. Gradio 页面打不开
+
+- 检查终端是否有报错
+- 尝试换端口：`demo.launch(server_port=7861)`
+- 若在远程服务器上运行，使用：`demo.launch(server_name="0.0.0.0")`
+
+### 5. 天气工具查询失败
+
+- 检查网络是否能访问 `https://wttr.in`
+- 尝试英文城市名，如 `Beijing` 而非「北京」（模型通常会自动转换）
+
+### 6. `python3 -m venv` 报错 ensurepip
+
+在 Ubuntu/Debian 上可安装：
+
+```bash
+sudo apt install python3-venv
+```
+
+或改用 conda 创建环境。
+
+---
+
+## 可选练习
+
+1. 在 `test_chat.py` 中加入 CoT 提示词，对比 JSON 输出质量
+2. 给 `app.py` 增加「回答字数限制」或「专业术语解释模式」
+3. 新增第二个工具（如获取当前时间），观察模型如何选择工具
+4. 将 `DEFAULT_MODEL` 改为 `deepseek-v4-pro`，对比回答差异
 
 ---
 
 ## 本周完成后将掌握的内容
 
-完成第1周后，你将能够：
-
 - 独立创建和管理 Python 虚拟环境
-- 正确调用 DeepSeek API 并管理 API Key
-- 使用 Gradio 快速构建简单聊天界面
-- 掌揣 Prompt 工程的核心技巧
-- 初步封装 LLM 调用逻辑
-- 处理 API 调用中的常见错误
-- 具备基本的代码组练和模块化能力
+- 正确调用 DeepSeek API 并安全管理 API Key
+- 使用 Gradio 快速构建聊天界面
+- 掌握 Prompt 工程的核心技巧
+- 封装 LLM 调用逻辑并处理常见错误
+- 具备基本的代码组织和模块化能力
 - 初步了解 Tool Use 的基本概念和流程
 
 ---
 
-** 说明 **：
-本文档会随着学习进度持续更新。
-每完成一个 Step 后，廚议在本文件末尾添加自己的心得和笔记。
+**说明**：建议每完成一个 Step 后，在本文件末尾记录自己的心得和笔记。
+
+**最后更新**：2026 年 7 月
