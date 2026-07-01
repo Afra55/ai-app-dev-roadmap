@@ -56,7 +56,7 @@ def main() -> int:
     load_dotenv(week2_dir / ".env")
     load_dotenv(week2_dir.parent / "week1" / ".env")
     if os.getenv("DEEPSEEK_API_KEY", "").strip():
-        print("已检测到 DEEPSEEK_API_KEY，可运行 test_rag.py 或 api.py 进行完整问答。")
+        print("已检测到 DEEPSEEK_API_KEY，可运行 demo_rag.py 或 api.py 进行完整问答。")
     else:
         print("提示: 尚未配置 DEEPSEEK_API_KEY，检索功能可用，生成回答前请配置 API Key。")
 

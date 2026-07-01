@@ -211,7 +211,7 @@ cd ../week2 && python ingest.py --reindex
 
 ### 3. 路由不符合预期
 
-修改 `config.py` 中 `LOCAL_KEYWORDS`、`AGENT_KEYWORDS`、`COMPLEX_KEYWORDS`。
+修改 `settings.py` 中 `LOCAL_KEYWORDS`、`AGENT_KEYWORDS`、`COMPLEX_KEYWORDS`。
 
 ### 4. Agent 响应慢
 

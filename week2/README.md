@@ -33,7 +33,7 @@ week2/
 ├── embeddings.py         # 本地 Embedding 模型
 ├── ingest.py             # 文档索引（Step 2-3）
 ├── rag_pipeline.py       # 检索 + 生成（Step 4-5）
-├── test_rag.py           # 命令行问答
+├── demo_rag.py           # 命令行问答（原 test_rag.py）
 ├── api.py                # FastAPI 服务（Step 6）
 ├── verify_setup.py       # 环境检查脚本
 └── sample_docs/          # 示例文档
@@ -73,8 +73,8 @@ python verify_setup.py
 
 ```bash
 python ingest.py --reindex     # 手动重建索引
-python test_rag.py             # 命令行交互问答
-python test_rag.py "什么是 RAG？"  # 单次提问
+python demo_rag.py             # 命令行交互问答
+python demo_rag.py "什么是 RAG？"  # 单次提问
 uvicorn api:app --reload --port 8000  # 启动 API 服务
 ```
 
@@ -205,13 +205,13 @@ python -c "from rag_pipeline import RAGPipeline; p=RAGPipeline(); docs=p.retriev
 **运行**：
 
 ```bash
-python test_rag.py
+python demo_rag.py
 ```
 
 **功能**：
 - 交互式问答
 - 返回答案 + 来源引用（文件名、chunk_id、摘要）
-- 支持单次提问：`python test_rag.py "Android 开发者有什么优势？"`
+- 支持单次提问：`python demo_rag.py "Android 开发者有什么优势？"`
 
 **输出示例**：
 
@@ -272,7 +272,7 @@ curl -X POST http://127.0.0.1:8000/ingest/reindex
 
 - [ ] `python verify_setup.py` 通过
 - [ ] `python ingest.py --reindex` 成功索引示例文档
-- [ ] `python test_rag.py "什么是 RAG？"` 能返回合理答案
+- [ ] `python demo_rag.py "什么是 RAG？"` 能返回合理答案
 - [ ] 答案包含来源引用（文件名）
 - [ ] 问文档外问题时，模型回答「资料中未找到相关信息」
 - [ ] `uvicorn api:app --port 8000` 启动成功

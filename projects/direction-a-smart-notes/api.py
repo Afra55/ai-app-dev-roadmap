@@ -2,6 +2,8 @@
 
 from __future__ import annotations
 
+from contextlib import asynccontextmanager
+
 from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel, Field
 
@@ -19,8 +21,18 @@ from database import (
 )
 from indexer import index_note, rebuild_index
 
-app = FastAPI(title="Smart Notes API", version="1.0.0")
 chat_service = NotesChatService()
+
+
+@asynccontextmanager
+async def lifespan(_app: FastAPI):
+    init_db()
+    seed_demo_notes()
+    rebuild_index()
+    yield
+
+
+app = FastAPI(title="Smart Notes API", version="1.0.0", lifespan=lifespan)
 
 
 class NoteCreate(BaseModel):
@@ -55,13 +67,6 @@ def _to_dict(note: Note) -> dict:
         "tags": note.tags,
         "updated_at": note.updated_at,
     }
-
-
-@app.on_event("startup")
-def on_startup() -> None:
-    init_db()
-    seed_demo_notes()
-    rebuild_index()
 
 
 @app.get("/health")

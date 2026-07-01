@@ -16,7 +16,7 @@
 
 ### 2. 为什么要做 Chunk？chunk_size 怎么选？
 
-**答**：受上下文窗口限制，且检索需要合适粒度。太大检索粗、易带噪声；太小上下文不完整。本仓库默认 `chunk_size=500, overlap=80`（`week2/config.py`），智能笔记用 `400/60`（`direction-a/config.py`）。
+**答**：受上下文窗口限制，且检索需要合适粒度。太大检索粗、易带噪声；太小上下文不完整。本仓库默认 `chunk_size=500, overlap=80`（`week2/config.py`），智能笔记用 `400/60`（`projects/direction-a-smart-notes/config.py`）。
 
 **追问**：如何验证？→ 改参数后 `--reindex`，用同一问题对比答案。
 
