@@ -2,6 +2,9 @@
 
 ← [路线图](../../README.md) · [第一阶段](../README.md) · **Week 3**
 
+> **本周 3 步速览**：① `pip install -e ".[dev]"` → ② `python verify_setup.py` → ③ `python chat_local.py`（Mock，无需 API Key）  
+> Android：`cd android-app && ./gradlew assembleDebug`（需 [SDK 配置](android-app/local.properties.example)）
+
 ## 学习目标
 
 完成本周学习后，你将能够：
@@ -34,14 +37,11 @@ week3/
 
 ### 1. 安装依赖
 
+> **推荐**：仓库根目录 `pip install -e ".[dev]"`。见 [docs/DEPENDENCIES.md](../../docs/DEPENDENCIES.md)。
+
 ```bash
 cd phase1/week3
-python3 -m venv .venv
-source .venv/bin/activate
-pip install -r requirements.txt
 ```
-
-> `torch` 和 `transformers` 体积较大。若只想快速体验，可只安装 `gradio` 并使用默认 Mock 后端。
 
 ### 2. 运行检查
 

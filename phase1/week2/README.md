@@ -2,6 +2,9 @@
 
 ← [路线图](../../README.md) · [第一阶段](../README.md) · **Week 2**
 
+> **本周 3 步速览**：① `pip install -e ".[dev]"`（根目录一次即可）→ ② `python ingest.py --reindex` → ③ `python demo_rag.py "什么是 RAG？"`  
+> 依赖说明见 [docs/DEPENDENCIES.md](../../docs/DEPENDENCIES.md)
+
 ## 学习目标
 
 完成本周学习后，你将能够：
@@ -43,11 +46,10 @@ week2/
 
 ### 1. 进入目录并安装依赖
 
+> **推荐**：仓库根目录 `pip install -e ".[dev]"`。见 [docs/DEPENDENCIES.md](../../docs/DEPENDENCIES.md)。
+
 ```bash
 cd phase1/week2
-python3 -m venv .venv
-source .venv/bin/activate   # Windows: .venv\Scripts\activate
-pip install -r requirements.txt
 ```
 
 > 首次运行会下载 Embedding 模型 `BAAI/bge-small-zh-v1.5`（约几百 MB），请保持网络畅通。
