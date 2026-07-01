@@ -9,9 +9,14 @@ from pathlib import Path
 from fastapi import FastAPI, File, HTTPException, UploadFile
 from pydantic import BaseModel, Field
 
-from config import SAMPLE_DOCS_DIR, SUPPORTED_SUFFIXES, UPLOAD_DIR
-from ingest import ingest_documents
-from rag_pipeline import RAGPipeline, Source
+try:
+    from .config import SAMPLE_DOCS_DIR, SUPPORTED_SUFFIXES, UPLOAD_DIR
+    from .ingest import ingest_documents
+    from .rag_pipeline import RAGPipeline, Source
+except ImportError:
+    from config import SAMPLE_DOCS_DIR, SUPPORTED_SUFFIXES, UPLOAD_DIR
+    from ingest import ingest_documents
+    from rag_pipeline import RAGPipeline, Source
 
 app = FastAPI(
     title="Week 2 RAG API",

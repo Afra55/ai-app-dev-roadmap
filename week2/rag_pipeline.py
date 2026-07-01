@@ -8,9 +8,14 @@ from pathlib import Path
 from langchain_chroma import Chroma
 from langchain_core.documents import Document
 
-from config import CHROMA_DIR, COLLECTION_NAME, TOP_K
-from embeddings import get_embeddings
-from llm_utils import call_llm
+try:
+    from .config import CHROMA_DIR, COLLECTION_NAME, TOP_K
+    from .embeddings import get_embeddings
+    from .llm_utils import call_llm
+except ImportError:
+    from config import CHROMA_DIR, COLLECTION_NAME, TOP_K
+    from embeddings import get_embeddings
+    from llm_utils import call_llm
 
 RAG_PROMPT = """你是文档问答助手。请仅根据以下参考资料回答用户问题。
 如果资料中没有相关信息，请明确回答「资料中未找到相关信息」，不要编造。

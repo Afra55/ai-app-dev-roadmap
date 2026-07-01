@@ -6,9 +6,14 @@ import argparse
 import json
 import sys
 
-from config import SAMPLE_DOCS_DIR
-from ingest import ingest_documents
-from rag_pipeline import RAGPipeline
+try:
+    from .config import SAMPLE_DOCS_DIR
+    from .ingest import ingest_documents
+    from .rag_pipeline import RAGPipeline
+except ImportError:
+    from config import SAMPLE_DOCS_DIR
+    from ingest import ingest_documents
+    from rag_pipeline import RAGPipeline
 
 
 def run_interactive(pipeline: RAGPipeline) -> int:

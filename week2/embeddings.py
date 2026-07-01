@@ -6,7 +6,10 @@ from functools import lru_cache
 
 from langchain_huggingface import HuggingFaceEmbeddings
 
-from config import EMBEDDING_MODEL
+try:
+    from .config import EMBEDDING_MODEL
+except ImportError:
+    from config import EMBEDDING_MODEL
 
 
 @lru_cache(maxsize=1)

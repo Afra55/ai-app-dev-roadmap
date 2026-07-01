@@ -23,3 +23,10 @@ Thumbs.db
 # Week 2 generated data
 week2/chroma_db/
 week2/uploaded_docs/
+
+# Week 3 generated data
+week3/models/
+week3/.venv/
+
+# Week 4 generated data
+week4/.venv/

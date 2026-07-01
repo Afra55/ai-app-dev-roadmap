@@ -41,8 +41,8 @@
 |------|-------|------------------|
 | 1    | Python + Prompt 工程 + DeepSeek API | 结构化输出聊天应用 |
 | 2    | RAG 实现 | 本地文档问答工具 + FastAPI |
-| 3    | 安卓端侧 AI | 离线 Qwen2.5 聊天 App |
-| 4    | 简单端云协同 + LangGraph Agent | ReAct Agent + 端云逻辑 |
+| 3    | 安卓端侧 AI | 离线 Qwen2.5 聊天 App（Python Demo + Android 骨架） |
+| 4    | 简单端云协同 + LangGraph Agent | ReAct Agent + 端云路由 |
 
 ### 第二阶段：分方向项目实战（第 5-8 周）
 
@@ -75,11 +75,24 @@ ai-app-dev-roadmap/
 │   └── app_with_tool.py      # Tool Use 示例
 ├── week2/
 │   ├── README.md             # 第2周详细步骤
-│   ├── requirements.txt      # 第2周 Python 依赖
-│   ├── ingest.py             # 文档索引
-│   ├── rag_pipeline.py       # RAG 检索与生成
-│   ├── api.py                # FastAPI 服务
-│   └── sample_docs/          # 示例文档
+│   ├── requirements.txt
+│   ├── ingest.py
+│   ├── rag_pipeline.py
+│   ├── api.py
+│   └── sample_docs/
+├── week3/
+│   ├── README.md             # 第3周详细步骤
+│   ├── local_llm.py
+│   ├── chat_local.py
+│   ├── app_local.py
+│   └── android-app/          # Android 端侧聊天工程
+├── week4/
+│   ├── README.md             # 第4周详细步骤
+│   ├── router.py
+│   ├── tools.py
+│   ├── agent.py
+│   ├── app.py
+│   └── app_gradio.py
 ├── projects/                 # 项目代码与文档
 ├── docs/                     # 附加参考资料
 └── .gitignore
@@ -91,7 +104,7 @@ ai-app-dev-roadmap/
 
 1. Star 并 Fork 本仓库
 2. Clone 到本地
-3. 进入 `week1/` 或 `week2/` 目录，按对应 `README.md` 的「快速开始」安装依赖并配置 API Key
+3. 进入对应 `weekX/` 目录，按 `README.md` 的「快速开始」安装依赖并配置 API Key
 4. 按照 `weekX/README.md` 完成每周详细任务
 5. 每周提交代码与笔记
 6. 通过 Issues 追踪问题
@@ -106,8 +119,8 @@ ai-app-dev-roadmap/
 
 - [Week 1: Python + Prompt + DeepSeek API](week1/README.md)
 - [Week 2: RAG 实现（本地文档问答 + FastAPI）](week2/README.md)
-- Week 3: 安卓端侧 AI（即将更新）
-- Week 4: 端云协同与 LangGraph（即将更新）
+- [Week 3: 安卓端侧 AI（离线 Qwen2.5 聊天）](week3/README.md)
+- [Week 4: 端云协同与 LangGraph Agent](week4/README.md)
 
 ---
 
@@ -155,4 +168,4 @@ ai-app-dev-roadmap/
 
 如有问题请提交 Issue。
 
-** 最后更新时间 **：2026 年 6 月
+** 最后更新时间 **：2026 年 7 月

@@ -11,15 +11,26 @@ from langchain_community.document_loaders import PyPDFLoader, TextLoader
 from langchain_core.documents import Document
 from langchain_text_splitters import RecursiveCharacterTextSplitter
 
-from config import (
-    CHROMA_DIR,
-    CHUNK_OVERLAP,
-    CHUNK_SIZE,
-    COLLECTION_NAME,
-    SAMPLE_DOCS_DIR,
-    SUPPORTED_SUFFIXES,
-)
-from embeddings import get_embeddings
+try:
+    from .config import (
+        CHROMA_DIR,
+        CHUNK_OVERLAP,
+        CHUNK_SIZE,
+        COLLECTION_NAME,
+        SAMPLE_DOCS_DIR,
+        SUPPORTED_SUFFIXES,
+    )
+    from .embeddings import get_embeddings
+except ImportError:
+    from config import (
+        CHROMA_DIR,
+        CHUNK_OVERLAP,
+        CHUNK_SIZE,
+        COLLECTION_NAME,
+        SAMPLE_DOCS_DIR,
+        SUPPORTED_SUFFIXES,
+    )
+    from embeddings import get_embeddings
 
 
 def load_documents(docs_dir: Path) -> list[Document]:
