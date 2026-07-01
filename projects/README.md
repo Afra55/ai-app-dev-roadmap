@@ -50,8 +50,11 @@ flowchart TB
     W4 --> C
 ```
 
-## 第三阶段预告（第 9-12 周）
+## 第三阶段（第 9-12 周）
 
-- Portfolio 打磨（录屏 + README 亮点）
-- 简历项目描述模板
-- 面试题与演示脚本
+Portfolio、简历、面试与投递详见 [`phase3/`](../phase3/)。
+
+```bash
+# 仓库根目录执行
+bash scripts/check_portfolio.sh
+```

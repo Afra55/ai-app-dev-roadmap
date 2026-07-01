@@ -54,10 +54,16 @@
 
 ### 第三阶段：Portfolio 打磨 + 简历 + 面试准备（第 9-12 周）
 
-- Portfolio 打磨
-- 简历优化（突出端侧 AI 与 端云协同优势）
-- 面试准备
-- 投递岗位
+详细指导见 [`phase3/`](phase3/)：
+
+| 周次 | 主题 | 链接 |
+|------|------|------|
+| 9 | Portfolio 打磨 | [week9-portfolio](phase3/week9-portfolio/) |
+| 10 | 简历优化 | [week10-resume](phase3/week10-resume/) |
+| 11 | 面试准备 | [week11-interview](phase3/week11-interview/) |
+| 12 | 投递收尾 | [week12-apply](phase3/week12-apply/) |
+
+一键检查可运行性：`bash scripts/check_portfolio.sh`
 
 ---
 
@@ -97,7 +103,13 @@ ai-app-dev-roadmap/
 │   ├── direction-a-smart-notes/
 │   ├── direction-b-bank-assistant/
 │   └── direction-c-enterprise-agent/
-├── docs/                     # 附加参考资料
+├── phase3/                   # 第三阶段：作品集、简历、面试、投递
+│   ├── week9-portfolio/
+│   ├── week10-resume/
+│   ├── week11-interview/
+│   └── week12-apply/
+├── scripts/
+│   └── check_portfolio.sh    # 一键检查各模块可运行性
 └── .gitignore
 ```
 
@@ -124,6 +136,14 @@ ai-app-dev-roadmap/
 - [Week 2: RAG 实现（本地文档问答 + FastAPI）](week2/README.md)
 - [Week 3: 安卓端侧 AI（离线 Qwen2.5 聊天）](week3/README.md)
 - [Week 4: 端云协同与 LangGraph Agent](week4/README.md)
+
+### 第三阶段
+
+- [Phase 3 总览](phase3/README.md)
+- [Week 9: Portfolio 打磨](phase3/week9-portfolio/README.md)
+- [Week 10: 简历优化](phase3/week10-resume/README.md)
+- [Week 11: 面试准备](phase3/week11-interview/README.md)
+- [Week 12: 投递收尾](phase3/week12-apply/README.md)
 
 ---
 
@@ -172,3 +192,11 @@ ai-app-dev-roadmap/
 如有问题请提交 Issue。
 
 ** 最后更新时间 **：2026 年 7 月
+
+---
+
+## 作品集快速检查
+
+```bash
+bash scripts/check_portfolio.sh
+```
