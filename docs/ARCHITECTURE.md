@@ -42,10 +42,9 @@ flowchart TB
 | Path | Role |
 |------|------|
 | `common/` | Shared LLM, RAG, embeddings, weather, agent utilities |
-| `week1/` | LLM API, Prompt, Tool Use demos |
-| `week2/` | RAG pipeline + FastAPI |
-| `week3/` | On-device LLM abstraction + Android skeleton |
-| `week4/` | Edge-cloud router + LangGraph Agent |
+| `week1-4/` | Phase 1 navigation hub (weeks 1–4) |
+| `week1/` … `week4/` | Phase 1 code and tutorials |
+| `week5-8/` | Phase 2 navigation hub (weeks 5–8) |
 | `projects/` | Portfolio apps (weeks 5–8) |
 | `phase3/` | Resume, interview, apply materials (weeks 9–12) |
 | `tests/` | Pytest regression suite |
