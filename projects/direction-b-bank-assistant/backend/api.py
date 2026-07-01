@@ -2,6 +2,8 @@
 
 from __future__ import annotations
 
+from contextlib import asynccontextmanager
+
 from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel, Field
 
@@ -13,13 +15,20 @@ try:
 except Exception:
     get_cloud_llm = None
 
-app = FastAPI(title="Bank Assistant API", version="1.0.0")
-
 PROMPT = """你是银行智能客服（教学演示）。仅根据 FAQ 资料回答，资料没有则说明无法回答。
 资料：
 {context}
 用户问题：{question}
 """
+
+
+@asynccontextmanager
+async def lifespan(_app: FastAPI):
+    rebuild_index()
+    yield
+
+
+app = FastAPI(title="Bank Assistant API", version="1.0.0", lifespan=lifespan)
 
 
 class AskRequest(BaseModel):
@@ -30,11 +39,6 @@ class AskResponse(BaseModel):
     answer: str
     masked_question: str
     sources: list[str]
-
-
-@app.on_event("startup")
-def startup() -> None:
-    rebuild_index()
 
 
 @app.get("/health")

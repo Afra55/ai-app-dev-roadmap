@@ -27,7 +27,7 @@ week1/
 ├── .env.example          # API Key 配置模板
 ├── requirements.txt      # Python 依赖
 ├── llm_utils.py          # 共享 LLM 封装（Step 4）
-├── test_chat.py          # 结构化输出聊天（Step 2）
+├── demo_chat.py          # 结构化输出聊天（Step 2，原 test_chat.py）
 ├── app.py                # 带历史记录的完整应用（Step 5）
 ├── app_with_tool.py      # Tool Use 入门（Step 6）
 └── verify_setup.py       # 本地环境检查脚本
@@ -77,7 +77,7 @@ python verify_setup.py
 ### 4. 按步骤运行示例
 
 ```bash
-python test_chat.py        # Step 2
+python demo_chat.py        # Step 2
 python app.py              # Step 5
 python app_with_tool.py    # Step 6
 ```
@@ -116,10 +116,10 @@ python -c "from llm_utils import _get_api_key; print('Key prefix:', _get_api_key
 **运行**：
 
 ```bash
-python test_chat.py
+python demo_chat.py
 ```
 
-**代码说明**（`test_chat.py`）：
+**代码说明**（`demo_chat.py`）：
 
 1. 通过 `llm_utils.get_llm()` 创建 DeepSeek 客户端
 2. 在 Prompt 中要求模型严格返回 JSON
@@ -297,7 +297,7 @@ python app_with_tool.py
 
 - [ ] 成功创建虚拟环境并安装 `requirements.txt` 中的依赖
 - [ ] `python verify_setup.py` 通过，且能检测到 API Key
-- [ ] `python test_chat.py` 能打开页面并返回 JSON 风格回答
+- [ ] `python demo_chat.py` 能打开页面并返回 JSON 风格回答
 - [ ] 能解释 Prompt 工程中至少 4 种核心技巧
 - [ ] `python app.py` 支持多轮对话且上下文连贯
 - [ ] `python app_with_tool.py` 能正确查询城市天气
@@ -348,7 +348,7 @@ sudo apt install python3-venv
 
 ## 可选练习
 
-1. 在 `test_chat.py` 中加入 CoT 提示词，对比 JSON 输出质量
+1. 在 `demo_chat.py` 中加入 CoT 提示词，对比 JSON 输出质量
 2. 给 `app.py` 增加「回答字数限制」或「专业术语解释模式」
 3. 新增第二个工具（如获取当前时间），观察模型如何选择工具
 4. 将 `DEFAULT_MODEL` 改为 `deepseek-v4-pro`，对比回答差异

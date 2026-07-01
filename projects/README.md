@@ -19,15 +19,20 @@
 ## 一键验证
 
 ```bash
+# 推荐：仓库根目录安装共享依赖
+pip install -e ".[dev]"
+
 # Direction A
-cd direction-a-smart-notes && pip install -r requirements.txt && python verify_setup.py
+cd projects/direction-a-smart-notes && python verify_setup.py
 
 # Direction B
-cd ../direction-b-bank-assistant/backend && pip install -r requirements.txt && python verify_setup.py
+cd ../direction-b-bank-assistant/backend && python verify_setup.py
 
 # Direction C
-cd ../../direction-c-enterprise-agent && pip install -r requirements.txt && python verify_setup.py
+cd ../../direction-c-enterprise-agent && python verify_setup.py
 ```
+
+共享 RAG / LLM 逻辑见 [`common/`](../common/) 与 [`docs/ARCHITECTURE.md`](../docs/ARCHITECTURE.md)。
 
 ## 服务端口
 

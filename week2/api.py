@@ -3,7 +3,7 @@
 from __future__ import annotations
 
 import shutil
-import tempfile
+from contextlib import asynccontextmanager
 from pathlib import Path
 
 from fastapi import FastAPI, File, HTTPException, UploadFile
@@ -18,12 +18,24 @@ except ImportError:
     from ingest import ingest_documents
     from rag_pipeline import RAGPipeline, Source
 
+pipeline = RAGPipeline()
+
+
+@asynccontextmanager
+async def lifespan(_app: FastAPI):
+    try:
+        pipeline.retrieve("RAG")
+    except FileNotFoundError:
+        ingest_documents(SAMPLE_DOCS_DIR, reindex=True)
+    yield
+
+
 app = FastAPI(
     title="Week 2 RAG API",
     description="本地文档问答服务",
     version="1.0.0",
+    lifespan=lifespan,
 )
-pipeline = RAGPipeline()
 
 
 class AskRequest(BaseModel):
@@ -131,12 +143,3 @@ async def ingest_upload(files: list[UploadFile] = File(...)) -> IngestResponse:
         document_count=doc_count,
         chunk_count=chunk_count,
     )
-
-
-@app.on_event("startup")
-def startup_ingest_if_needed() -> None:
-    """Auto-build the index on first startup when vector store is missing."""
-    try:
-        pipeline.retrieve("RAG")
-    except FileNotFoundError:
-        ingest_documents(SAMPLE_DOCS_DIR, reindex=True)

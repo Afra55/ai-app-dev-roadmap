@@ -6,9 +6,10 @@ from langchain_chroma import Chroma
 from langchain_core.documents import Document
 from langchain_text_splitters import RecursiveCharacterTextSplitter
 
+from common.embeddings import get_embeddings
+from common.rag import build_vectorstore, delete_by_metadata, reset_chroma_dir, similarity_search
 from config import CHROMA_DIR, CHUNK_OVERLAP, CHUNK_SIZE, COLLECTION_NAME
 from database import Note, list_notes
-from week2.embeddings import get_embeddings
 
 
 def _split_note(note: Note) -> list[Document]:
@@ -35,23 +36,8 @@ def _split_note(note: Note) -> list[Document]:
     return documents
 
 
-def _get_store() -> Chroma:
-    return Chroma(
-        collection_name=COLLECTION_NAME,
-        embedding_function=get_embeddings(),
-        persist_directory=str(CHROMA_DIR),
-    )
-
-
 def delete_note_vectors(note_id: int) -> None:
-    if not CHROMA_DIR.exists():
-        return
-    store = _get_store()
-    # Chroma metadata filter delete
-    try:
-        store._collection.delete(where={"note_id": note_id})  # noqa: SLF001
-    except Exception:
-        pass
+    delete_by_metadata(CHROMA_DIR, COLLECTION_NAME, {"note_id": note_id})
 
 
 def index_note(note: Note) -> int:
@@ -60,20 +46,16 @@ def index_note(note: Note) -> int:
     if not docs:
         return 0
 
-    Chroma.from_documents(
-        documents=docs,
-        embedding=get_embeddings(),
+    build_vectorstore(
+        docs,
+        chroma_dir=CHROMA_DIR,
         collection_name=COLLECTION_NAME,
-        persist_directory=str(CHROMA_DIR),
     )
     return len(docs)
 
 
 def rebuild_index() -> tuple[int, int]:
-    if CHROMA_DIR.exists():
-        import shutil
-
-        shutil.rmtree(CHROMA_DIR)
+    reset_chroma_dir(CHROMA_DIR)
 
     notes = list_notes()
     chunk_total = 0
@@ -83,7 +65,9 @@ def rebuild_index() -> tuple[int, int]:
 
 
 def search_notes(query: str, top_k: int = 4) -> list[Document]:
-    if not CHROMA_DIR.exists():
-        return []
-    store = _get_store()
-    return store.similarity_search(query, k=top_k)
+    return similarity_search(
+        query,
+        chroma_dir=CHROMA_DIR,
+        collection_name=COLLECTION_NAME,
+        top_k=top_k,
+    )

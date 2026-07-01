@@ -2,6 +2,8 @@
 
 from __future__ import annotations
 
+from contextlib import asynccontextmanager
+
 from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel, Field
 
@@ -9,8 +11,17 @@ from agent import EnterpriseAgentService
 from audit import init_audit_db, list_audit
 from knowledge import rebuild_index
 
-app = FastAPI(title="Enterprise Agent API", version="1.0.0")
 service = EnterpriseAgentService()
+
+
+@asynccontextmanager
+async def lifespan(_app: FastAPI):
+    init_audit_db()
+    rebuild_index()
+    yield
+
+
+app = FastAPI(title="Enterprise Agent API", version="1.0.0", lifespan=lifespan)
 
 
 class ChatRequest(BaseModel):
@@ -21,12 +32,6 @@ class ChatRequest(BaseModel):
 class ChatResponse(BaseModel):
     route: str
     answer: str
-
-
-@app.on_event("startup")
-def startup() -> None:
-    init_audit_db()
-    rebuild_index()
 
 
 @app.get("/health")

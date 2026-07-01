@@ -2,22 +2,20 @@
 
 from __future__ import annotations
 
-import shutil
-from pathlib import Path
-
-from langchain_chroma import Chroma
 from langchain_community.document_loaders import TextLoader
-from langchain_text_splitters import RecursiveCharacterTextSplitter
+from langchain_core.documents import Document
 
+from common.rag import (
+    build_vectorstore,
+    reset_chroma_dir,
+    similarity_search,
+    split_documents,
+)
 from config import CHROMA_DIR, COLLECTION_NAME, SAMPLE_DOCS_DIR
-from week2.embeddings import get_embeddings
 
 
-def rebuild_index() -> tuple[int, int]:
-    if CHROMA_DIR.exists():
-        shutil.rmtree(CHROMA_DIR)
-
-    documents = []
+def _load_department_documents() -> list[Document]:
+    documents: list[Document] = []
     for dept_dir in sorted(SAMPLE_DOCS_DIR.iterdir()):
         if not dept_dir.is_dir():
             continue
@@ -28,35 +26,29 @@ def rebuild_index() -> tuple[int, int]:
                 doc.metadata["department"] = department
                 doc.metadata["source"] = path.name
                 documents.append(doc)
+    if not documents:
+        raise ValueError(f"在 {SAMPLE_DOCS_DIR} 中未找到部门文档")
+    return documents
 
-    splitter = RecursiveCharacterTextSplitter(chunk_size=350, chunk_overlap=50)
-    chunks = splitter.split_documents(documents)
-    Chroma.from_documents(
-        documents=chunks,
-        embedding=get_embeddings(),
+
+def rebuild_index() -> tuple[int, int]:
+    reset_chroma_dir(CHROMA_DIR)
+    documents = _load_department_documents()
+    chunks = split_documents(documents, chunk_size=350, chunk_overlap=50)
+    build_vectorstore(
+        chunks,
+        chroma_dir=CHROMA_DIR,
         collection_name=COLLECTION_NAME,
-        persist_directory=str(CHROMA_DIR),
     )
     return len(documents), len(chunks)
 
 
 def search_knowledge(query: str, department: str | None = None, top_k: int = 3) -> list:
-    if not CHROMA_DIR.exists():
-        return []
-
-    store = Chroma(
+    where = {"department": department} if department else None
+    return similarity_search(
+        query,
+        chroma_dir=CHROMA_DIR,
         collection_name=COLLECTION_NAME,
-        embedding_function=get_embeddings(),
-        persist_directory=str(CHROMA_DIR),
+        top_k=top_k,
+        where=where,
     )
-
-    if department:
-        try:
-            return store.similarity_search(
-                query,
-                k=top_k,
-                filter={"department": department},
-            )
-        except Exception:
-            pass
-    return store.similarity_search(query, k=top_k)

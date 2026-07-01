@@ -3,9 +3,8 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
-from typing import Any
 
-from langchain_core.messages import AIMessage, HumanMessage
+from langchain_core.messages import HumanMessage
 from langgraph.prebuilt import create_react_agent
 
 try:
@@ -45,14 +44,6 @@ class EdgeCloudOrchestrator:
             self.agent = create_react_agent(self._get_cloud_llm(), ALL_TOOLS)
         return self.agent
 
-    @staticmethod
-    def _extract_agent_answer(result: dict[str, Any]) -> str:
-        messages = result.get("messages", [])
-        for message in reversed(messages):
-            if isinstance(message, AIMessage) and message.content:
-                return str(message.content)
-        return "Agent 未返回有效答案。"
-
     def run(self, query: str) -> OrchestratorResult:
         decision = route_query(query)
 
@@ -89,7 +80,7 @@ class EdgeCloudOrchestrator:
         return OrchestratorResult(
             route=decision.route,
             reason=decision.reason,
-            answer=self._extract_agent_answer(agent_result),
+            answer=extract_agent_answer(agent_result),
             backend="langgraph-react-agent",
         )
 

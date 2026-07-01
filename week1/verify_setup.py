@@ -20,7 +20,7 @@ def main() -> int:
         check_import(module)
 
     import llm_utils  # noqa: F401
-    import test_chat  # noqa: F401
+    import demo_chat  # noqa: F401
     import app  # noqa: F401
     import app_with_tool  # noqa: F401
 

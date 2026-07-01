@@ -5,8 +5,9 @@ from __future__ import annotations
 import ast
 import operator
 
-import requests
 from langchain_core.tools import tool
+
+from common.agent_utils import extract_agent_answer
 
 try:
     from . import settings as _settings  # noqa: F401
@@ -47,13 +48,9 @@ def search_knowledge_base(question: str) -> str:
 @tool
 def get_weather(city: str) -> str:
     """Query current weather for a city."""
-    try:
-        response = requests.get(f"https://wttr.in/{city}?format=3", timeout=5)
-        if response.status_code == 200:
-            return f"{city} 当前天气：{response.text.strip()}"
-        return f"无法获取 {city} 的天气信息"
-    except Exception as exc:
-        return f"查询天气时出错: {exc}"
+    from common.weather import fetch_weather
+
+    return fetch_weather(city)
 
 
 _ALLOWED_OPERATORS = {
