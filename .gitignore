@@ -30,3 +30,8 @@ week3/.venv/
 
 # Week 4 generated data
 week4/.venv/
+
+# Phase 2 generated data
+projects/direction-a-smart-notes/data/
+projects/direction-b-bank-assistant/backend/data/
+projects/direction-c-enterprise-agent/data/

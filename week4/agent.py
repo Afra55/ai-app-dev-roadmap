@@ -8,9 +8,14 @@ from typing import Any
 from langchain_core.messages import AIMessage, HumanMessage
 from langgraph.prebuilt import create_react_agent
 
-from llm_utils import get_cloud_llm
-from router import RouteDecision, route_query
-from tools import ALL_TOOLS
+try:
+    from .llm_utils import get_cloud_llm
+    from .router import RouteDecision, route_query
+    from .tools import ALL_TOOLS
+except ImportError:
+    from llm_utils import get_cloud_llm
+    from router import RouteDecision, route_query
+    from tools import ALL_TOOLS
 from week3.local_llm import get_local_llm
 
 

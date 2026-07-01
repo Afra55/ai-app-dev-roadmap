@@ -8,7 +8,10 @@ import operator
 import requests
 from langchain_core.tools import tool
 
-import settings  # noqa: F401  # bootstrap REPO_ROOT
+try:
+    from . import settings as _settings  # noqa: F401
+except ImportError:
+    import settings as _settings  # noqa: F401
 from week2.rag_pipeline import RAGPipeline
 
 _rag_pipeline: RAGPipeline | None = None

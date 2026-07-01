@@ -9,7 +9,10 @@ from typing import Any
 from dotenv import load_dotenv
 from langchain_openai import ChatOpenAI
 
-from settings import WEEK1_DIR, WEEK4_DIR
+try:
+    from .settings import WEEK1_DIR, WEEK4_DIR
+except ImportError:
+    from settings import WEEK1_DIR, WEEK4_DIR
 
 load_dotenv(WEEK4_DIR / ".env")
 if not os.getenv("DEEPSEEK_API_KEY", "").strip():

@@ -46,11 +46,11 @@
 
 ### 第二阶段：分方向项目实战（第 5-8 周）
 
-根据目标岗位选择主方向：
+根据目标岗位选择主方向（代码见 [`projects/`](projects/)）：
 
-- **方向 A** (岗位1 AI 应用软件开发工程师)：UX 工程化 + 高级端侧 AI → 端云协同智能笔记 App
-- **方向 B** (岗位2 国有银行 Android 开发)：高级 Android + 安全开发 → 银行智能客服 App
-- **方向 C** (岗位3 国企 AI Agent 应用开发)：Python 全栈 + 高级 Agent → 企业内部智能助手 Agent
+- **方向 A** (岗位1 AI 应用软件开发工程师)：UX 工程化 + 高级端侧 AI → [端云协同智能笔记 App](projects/direction-a-smart-notes/)
+- **方向 B** (岗位2 国有银行 Android 开发)：高级 Android + 安全开发 → [银行智能客服 App](projects/direction-b-bank-assistant/)
+- **方向 C** (岗位3 国企 AI Agent 应用开发)：Python 全栈 + 高级 Agent → [企业内部智能助手 Agent](projects/direction-c-enterprise-agent/)
 
 ### 第三阶段：Portfolio 打磨 + 简历 + 面试准备（第 9-12 周）
 
@@ -93,7 +93,10 @@ ai-app-dev-roadmap/
 │   ├── agent.py
 │   ├── app.py
 │   └── app_gradio.py
-├── projects/                 # 项目代码与文档
+├── projects/                 # 第二阶段项目（A/B/C 三方向）
+│   ├── direction-a-smart-notes/
+│   ├── direction-b-bank-assistant/
+│   └── direction-c-enterprise-agent/
 ├── docs/                     # 附加参考资料
 └── .gitignore
 ```

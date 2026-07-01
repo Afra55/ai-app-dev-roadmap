@@ -5,7 +5,10 @@ from __future__ import annotations
 from dataclasses import dataclass
 from typing import Literal
 
-from settings import AGENT_KEYWORDS, COMPLEX_KEYWORDS, LOCAL_KEYWORDS, LOCAL_MAX_CHARS
+try:
+    from .settings import AGENT_KEYWORDS, COMPLEX_KEYWORDS, LOCAL_KEYWORDS, LOCAL_MAX_CHARS
+except ImportError:
+    from settings import AGENT_KEYWORDS, COMPLEX_KEYWORDS, LOCAL_KEYWORDS, LOCAL_MAX_CHARS
 
 RouteType = Literal["local", "cloud", "agent"]
 
