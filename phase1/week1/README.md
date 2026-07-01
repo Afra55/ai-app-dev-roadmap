@@ -2,6 +2,9 @@
 
 ← [路线图](../../README.md) · [第一阶段](../README.md) · **Week 1**
 
+> **本周 3 步速览**：① 根目录 `pip install -e ".[dev]"` + 配置 `phase1/week1/.env` → ② `python verify_setup.py` → ③ `python demo_chat.py` → `app.py`  
+> 依赖说明见 [docs/DEPENDENCIES.md](../../docs/DEPENDENCIES.md)
+
 ## 学习目标
 
 完成本周学习后，你将能够：
@@ -37,20 +40,11 @@ week1/
 
 ### 1. 进入目录并安装依赖
 
+> **推荐**：在仓库根目录执行 `pip install -e ".[dev]"` 一次即可，无需每周单独建 venv。详见 [docs/DEPENDENCIES.md](../../docs/DEPENDENCIES.md)。
+
 ```bash
 cd phase1/week1
-python3 -m venv .venv
-source .venv/bin/activate   # Windows: .venv\Scripts\activate
-pip install -r requirements.txt
 ```
-
-> 如果你使用 conda，也可以执行：
->
-> ```bash
-> conda create -n llm-dev python=3.10 -y
-> conda activate llm-dev
-> pip install -r requirements.txt
-> ```
 
 ### 2. 配置 API Key
 

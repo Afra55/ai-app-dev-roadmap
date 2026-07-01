@@ -2,6 +2,9 @@
 
 ← [路线图](../../README.md) · [第一阶段](../README.md) · **Week 4**
 
+> **本周 3 步速览**：① 确保 Week2 索引存在 → ② `python verify_setup.py` → ③ `python app.py` 试「你好 / 天气 / 分析」三路路由  
+> 依赖说明见 [docs/DEPENDENCIES.md](../../docs/DEPENDENCIES.md)
+
 ## 学习目标
 
 完成本周学习后，你将能够：

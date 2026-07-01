@@ -82,9 +82,9 @@ flowchart TB
 git clone https://github.com/Afra55/ai-app-dev-roadmap.git
 cd ai-app-dev-roadmap
 
-pip install -e ".[dev]"                    # ① 安装全仓库依赖
+pip install -e ".[dev]"                    # ① 安装全仓库依赖（见 docs/DEPENDENCIES.md）
 cp .env.example phase1/week1/.env          # ② 可选：配置 API Key（无 Key 可走 Mock）
-bash scripts/check_portfolio.sh            # ③ 一键检查各周是否可运行
+bash scripts/check_portfolio.sh            # ③ 一键检查（21 项 pytest + 各周冒烟）
 ```
 
 **第一次体验**（有 API Key 效果更好，没有也能跑部分 Demo）：
@@ -282,15 +282,17 @@ uvicorn api:app --reload --port 8010
 
 ## 作品集与演示
 
-| 项目 | 亮点 | 一键演示 |
-|------|------|----------|
-| [Direction A 智能笔记](phase2/direction-a-smart-notes/) | 端云协同 + 笔记 RAG + Android | `bash phase3/week9-portfolio/demo-scripts/direction-a-demo.sh` |
+| 项目 | 亮点 | 演示 |
+|------|------|------|
+| [Direction A 智能笔记](phase2/direction-a-smart-notes/) | 端云协同 + 笔记 RAG + Android | [3 分钟录屏脚本](phase3/week9-portfolio/direction-a-demo-3min.md) · [一键预演](phase3/week9-portfolio/demo-scripts/direction-a-record-demo.sh) |
 | [Direction B 银行客服](phase2/direction-b-bank-assistant/) | 金融脱敏 + FAQ RAG | `bash phase3/week9-portfolio/demo-scripts/direction-b-demo.sh` |
 | [Direction C 企业 Agent](phase2/direction-c-enterprise-agent/) | 部门权限 + 审计日志 | `bash phase3/week9-portfolio/demo-scripts/direction-c-demo.sh` |
 
-全量检查：`bash scripts/check_portfolio.sh`（含 pytest + 各周冒烟测试）
+录屏指南：[docs/DEMO_RECORDING.md](docs/DEMO_RECORDING.md) · 视频链接：[demo-video-links.md](phase3/week9-portfolio/demo-video-links.md)
 
-架构说明：[docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) · 贡献指南：[CONTRIBUTING.md](CONTRIBUTING.md)
+全量检查：`bash scripts/check_portfolio.sh`（21 项 pytest + 各周冒烟测试）
+
+依赖说明：[docs/DEPENDENCIES.md](docs/DEPENDENCIES.md) · 架构：[docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) · 贡献：[CONTRIBUTING.md](CONTRIBUTING.md)
 
 ---
 

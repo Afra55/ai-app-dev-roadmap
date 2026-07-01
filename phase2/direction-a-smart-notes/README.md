@@ -27,7 +27,7 @@ API 文档：http://127.0.0.1:8010/docs
 ## Android App
 
 1. 启动后端：`uvicorn api:app --host 0.0.0.0 --port 8010`
-2. Android Studio 打开 `android-app/`（需 JDK 17+）
+2. Android Studio 打开 `android-app/`（或命令行 `./gradlew assembleDebug`，见 [android-app/README.md](android-app/README.md)）
 3. 模拟器访问宿主机：`http://10.0.2.2:8010`（已在 `BuildConfig.API_BASE_URL` 配置）
 
 **离线兜底**：后端未启动时，问候语（如「你好」）由端侧 Mock 本地回复，与 Week 3 `MockLocalLLM` 行为一致（见 `NotesRepository.kt`）。
