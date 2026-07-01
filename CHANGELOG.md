@@ -12,6 +12,7 @@
 - `phase2/*/.env.example` for all directions
 
 ### Changed
+- Root README: expanded 12-week guide with per-week tasks, deliverables, and verification steps
 - **BREAKING**: Repository layout is now `phase1/` + `phase2/` + `phase3/` (was `week1-4/` + `projects/` at root)
 - Root README: unified 12-week navigation with direct links to phase directories
 - Added `phase1/README.md` as Phase 1 navigation hub (symmetric with phase2, phase3)
