@@ -2,6 +2,8 @@
 
 本目录对应路线中的 **第 5–8 周**。每周按所选方向推进一个 Portfolio 项目，而非单独的 `week5/` 代码目录。
 
+← 上一阶段：[第一阶段（第 1–4 周）](../week1-4/) · 下一阶段：[第三阶段（第 9–12 周）](../phase3/)
+
 ## 周次与项目映射
 
 | 周次 | 方向 A（AI 应用开发） | 方向 B（银行 Android） | 方向 C（企业 Agent） |
@@ -13,11 +15,13 @@
 
 ## 项目入口
 
-- [方向 A：端云协同智能笔记](direction-a-smart-notes/) — 端口 `8010`
-- [方向 B：银行智能客服](direction-b-bank-assistant/) — 端口 `8020`
-- [方向 C：企业内部智能助手](direction-c-enterprise-agent/) — 端口 `8030`
+| 方向 | 代码目录 | 学习指南 | 端口 |
+|------|----------|----------|------|
+| A 智能笔记 | [direction-a-smart-notes/](../projects/direction-a-smart-notes/) | [README](../projects/direction-a-smart-notes/README.md) | `8010` |
+| B 银行客服 | [direction-b-bank-assistant/](../projects/direction-b-bank-assistant/) | [README](../projects/direction-b-bank-assistant/README.md) | `8020` |
+| C 企业 Agent | [direction-c-enterprise-agent/](../projects/direction-c-enterprise-agent/) | [README](../projects/direction-c-enterprise-agent/README.md) | `8030` |
 
-总览与选型说明见 [projects/README.md](README.md)。
+总览与选型说明见 [projects/README.md](../projects/README.md)。
 
 ## 快速验证
 

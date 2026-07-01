@@ -1,5 +1,7 @@
 # 第1周：Python 基础 + Prompt 工程 + DeepSeek API 实践
 
+← [路线图](../README.md) · [第一阶段（第 1–4 周）](../week1-4/) · **Week 1**
+
 ## 学习目标
 
 完成本周学习后，你将能够：
