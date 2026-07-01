@@ -17,5 +17,6 @@ CHUNK_SIZE = 400
 CHUNK_OVERLAP = 60
 TOP_K = 4
 
-if str(REPO_ROOT) not in sys.path:
-    sys.path.insert(0, str(REPO_ROOT))
+from common.paths import ensure_repo_on_path
+
+ensure_repo_on_path()

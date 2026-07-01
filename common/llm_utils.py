@@ -39,8 +39,8 @@ def _get_api_key() -> str:
     api_key = os.getenv("DEEPSEEK_API_KEY", "").strip()
     if not api_key:
         raise ValueError(
-            "未找到 DEEPSEEK_API_KEY。请在 week1/.env 或仓库根目录 .env 中配置，"
-            "可参考 week1/.env.example。"
+            "未找到 DEEPSEEK_API_KEY。请在 phase1/week1/.env 或仓库根目录 .env 中配置，"
+            "可参考 phase1/week1/.env.example。"
         )
     return api_key
 

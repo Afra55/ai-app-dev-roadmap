@@ -19,10 +19,10 @@
 
 | 模块 | 实现 | 对应仓库 |
 |------|------|----------|
-| 笔记存储 | SQLite CRUD | `projects/direction-a-smart-notes/database.py` |
+| 笔记存储 | SQLite CRUD | `phase2/direction-a-smart-notes/database.py` |
 | 自动索引 | 保存时写入 Chroma | `indexer.py` |
 | 笔记问答 | RAG Prompt + 来源引用 | `chat_service.py` |
-| 端云路由 | local / cloud / agent | 复用 `week4/agent.py` |
+| 端云路由 | local / cloud / agent | 复用 `phase1/week4/agent.py` |
 | 客户端 | Android Compose + Retrofit | `android-app/` |
 
 ### 可量化表述（按实际填写）

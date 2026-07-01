@@ -1,6 +1,6 @@
 # 第4周：端云协同 + LangGraph ReAct Agent
 
-← [路线图](../README.md) · [第一阶段（第 1–4 周）](../week1-4/) · **Week 4**
+← [路线图](../../README.md) · [第一阶段](../README.md) · **Week 4**
 
 ## 学习目标
 
@@ -16,7 +16,7 @@
 
 - [LangGraph 官方文档](https://langchain-ai.github.io/langgraph/)
 - [LangGraph ReAct Agent 教程](https://langchain-ai.github.io/langgraph/tutorials/prebuilt/)
-- 第 1-3 周代码：`week1/` `week2/` `week3/`
+- 第 1-3 周代码：`phase1/week1/` `phase1/week2/` `phase1/week3/`
 
 ---
 
@@ -36,13 +36,13 @@ week4/
 ### 1. 安装依赖
 
 ```bash
-cd week4
+cd phase1/week4
 pip install -r requirements.txt
 ```
 
 ### 2. 配置 API Key（cloud/agent 路径需要）
 
-复用 `week1/.env` 或：
+复用 `phase1/week1/.env` 或：
 
 ```bash
 cp .env.example .env
@@ -118,7 +118,7 @@ python app.py --route-only "什么是 RAG？"
 
 `tools.py` 提供三个工具：
 
-1. **`search_knowledge_base`**：调用 `week2/rag_pipeline.py`
+1. **`search_knowledge_base`**：调用 `phase1/week2/rag_pipeline.py`
 2. **`get_weather`**：调用 wttr.in 免费天气 API
 3. **`calculator`**：安全数学表达式计算
 
@@ -209,7 +209,7 @@ cd ../week2 && python ingest.py --reindex
 
 ### 2. cloud/agent 路径报错 API Key
 
-在 `week1/.env` 或 `week4/.env` 配置 `DEEPSEEK_API_KEY`。
+在 `phase1/week1/.env` 或 `phase1/week4/.env` 配置 `DEEPSEEK_API_KEY`。
 
 ### 3. 路由不符合预期
 

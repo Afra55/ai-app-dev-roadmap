@@ -18,14 +18,14 @@
 
 | 技能 | 自评 | 证据（仓库路径） |
 |------|------|------------------|
-| Prompt 工程 | 熟练 / 了解 / 计划 | `week1/` |
-| DeepSeek / OpenAI 兼容 API | 熟练 / 了解 / 计划 | `week1/llm_utils.py` |
-| RAG（分块、Embedding、检索） | 熟练 / 了解 / 计划 | `week2/`、`projects/direction-a-smart-notes/` |
-| FastAPI 服务化 | 熟练 / 了解 / 计划 | `week2/api.py`、各 project API |
-| 端侧模型（Mock / 本地小模型） | 熟练 / 了解 / 计划 | `week3/` |
-| 端云协同路由 | 熟练 / 了解 / 计划 | `week4/router.py` |
-| LangGraph Agent | 熟练 / 了解 / 计划 | `week4/agent.py`、`direction-c/` |
-| Tool Use / 多工具协作 | 熟练 / 了解 / 计划 | `week4/tools.py` |
+| Prompt 工程 | 熟练 / 了解 / 计划 | `phase1/week1/` |
+| DeepSeek / OpenAI 兼容 API | 熟练 / 了解 / 计划 | `phase1/week1/llm_utils.py` |
+| RAG（分块、Embedding、检索） | 熟练 / 了解 / 计划 | `phase1/week2/`、`phase2/direction-a-smart-notes/` |
+| FastAPI 服务化 | 熟练 / 了解 / 计划 | `phase1/week2/api.py`、各 project API |
+| 端侧模型（Mock / 本地小模型） | 熟练 / 了解 / 计划 | `phase1/week3/` |
+| 端云协同路由 | 熟练 / 了解 / 计划 | `phase1/week4/router.py` |
+| LangGraph Agent | 熟练 / 了解 / 计划 | `phase1/week4/agent.py`、`phase2/direction-c-enterprise-agent/` |
+| Tool Use / 多工具协作 | 熟练 / 了解 / 计划 | `phase1/week4/tools.py` |
 
 ---
 
@@ -33,10 +33,10 @@
 
 | 技能 | 自评 | 证据 |
 |------|------|------|
-| Jetpack Compose UI | 熟练 / 了解 / 计划 | `week3/android-app`、`projects/*/android-app` |
+| Jetpack Compose UI | 熟练 / 了解 / 计划 | `phase1/week3/android-app`、`phase2/*/android-app` |
 | Retrofit 网络层 | 熟练 / 了解 / 计划 | `direction-a` NotesApi |
 | ViewModel 状态管理 | 熟练 / 了解 / 计划 | 各 Android ViewModel |
-| 端侧 AI 集成（MLC/LiteRT） | 熟练 / 了解 / 计划 | `week3/README` Step 5 |
+| 端侧 AI 集成（MLC/LiteRT） | 熟练 / 了解 / 计划 | `phase1/week3/README` Step 5 |
 
 ---
 
@@ -64,8 +64,8 @@
 
 | 若多数为「计划」 | 行动 |
 |------------------|------|
-| RAG | 重跑 `week2/verify_setup.py` + 改 chunk 参数实验 |
-| Agent | 重跑 `week4/app.py` 三个路由用例 |
+| RAG | 重跑 `phase1/week2/verify_setup.py` + 改 chunk 参数实验 |
+| Agent | 重跑 `phase1/week4/app.py` 三个路由用例 |
 | Android | 在模拟器跑通 Direction A App |
 | 端侧真实模型 | 试 `week3/chat_local.py --backend qwen` |
 

@@ -5,7 +5,7 @@
 - [ ] 终端字体放大（演示用）
 - [ ] 关闭无关通知
 - [ ] 提前运行一次 `bash scripts/check_portfolio.sh`
-- [ ] 若演示 cloud/agent 路径，确认 `week1/.env` 已配置 API Key
+- [ ] 若演示 cloud/agent 路径，确认 `phase1/week1/.env` 已配置 API Key
 - [ ] 准备架构图（见 `project-highlights.md`）
 
 ---

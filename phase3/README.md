@@ -1,9 +1,9 @@
 # 第三阶段：Portfolio 打磨 + 简历 + 面试 + 投递
 
 **时间**：第 9–12 周  
-**目标**：把 [week1–4](../week1-4/) 和 [projects/](../projects/) 变成可演示、可写进简历、可答追问的求职资产。
+**目标**：把 [phase1](../phase1/) 和 [phase2/](../phase2/) 变成可演示、可写进简历、可答追问的求职资产。
 
-← 上一阶段：[第二阶段（第 5–8 周）](../week5-8/)
+← [路线图](../README.md) · [第二阶段](../phase2/) · **Phase 3**
 
 ---
 
@@ -48,7 +48,7 @@ bash scripts/check_portfolio.sh
 
 ```mermaid
 flowchart LR
-    W1_4[week1-4 基础] --> P[projects A/B/C]
+    W1_4[phase1 基础] --> P[projects A/B/C]
     P --> W9[Week 9 演示]
     W9 --> W10[Week 10 简历]
     W10 --> W11[Week 11 面试]

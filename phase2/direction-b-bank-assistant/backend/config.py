@@ -12,5 +12,6 @@ SAMPLE_DOCS_DIR = BACKEND_DIR / "sample_docs"
 CHROMA_DIR = BACKEND_DIR / "data" / "chroma_db"
 COLLECTION_NAME = "bank_faq"
 
-if str(REPO_ROOT) not in sys.path:
-    sys.path.insert(0, str(REPO_ROOT))
+from common.paths import ensure_repo_on_path
+
+ensure_repo_on_path()

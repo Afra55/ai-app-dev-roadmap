@@ -42,4 +42,4 @@ include = ["common*"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
-pythonpath = ["."]
+pythonpath = [".", "phase1", "phase2"]

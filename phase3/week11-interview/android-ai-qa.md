@@ -1,6 +1,6 @@
 # Android + AI 面试题
 
-结合 `week3/android-app`、`projects/direction-a`、`projects/direction-b`。
+结合 `phase1/week3/android-app`、`phase2/direction-a`、`phase2/direction-b`。
 
 ---
 

@@ -66,7 +66,7 @@ def main() -> int:
 
     week2_chroma = week4_dir.parent / "week2" / "chroma_db"
     if not week2_chroma.exists():
-        print("提示: week2 向量库尚未建立，Agent 知识库工具需要先运行 week2/ingest.py。")
+        print("提示: week2 向量库尚未建立，Agent 知识库工具需要先运行 phase1/week2/ingest.py。")
     else:
         print("检测到 week2 向量库，Agent 知识库工具可用。")
 

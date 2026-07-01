@@ -42,10 +42,9 @@ flowchart TB
 | Path | Role |
 |------|------|
 | `common/` | Shared LLM, RAG, embeddings, weather, agent utilities |
-| `week1-4/` | Phase 1 navigation hub (weeks 1–4) |
-| `week1/` … `week4/` | Phase 1 code and tutorials |
-| `week5-8/` | Phase 2 navigation hub (weeks 5–8) |
-| `projects/` | Portfolio apps (weeks 5–8) |
+| `phase1/` | Phase 1 navigation hub (weeks 1–4) |
+| `phase1/week1/` … `phase1/week4/` | Phase 1 code and tutorials |
+| `phase2/direction-a-smart-notes/` 等 | Phase 2 portfolio apps (weeks 5–8) |
 | `phase3/` | Resume, interview, apply materials (weeks 9–12) |
 | `tests/` | Pytest regression suite |
 | `scripts/` | Portfolio verification scripts |

@@ -6,13 +6,16 @@ import sys
 from pathlib import Path
 
 WEEK4_DIR = Path(__file__).resolve().parent
-REPO_ROOT = WEEK4_DIR.parent
-WEEK1_DIR = REPO_ROOT / "week1"
-WEEK2_DIR = REPO_ROOT / "week2"
-WEEK3_DIR = REPO_ROOT / "week3"
+PHASE1_DIR = WEEK4_DIR.parent
+REPO_ROOT = PHASE1_DIR.parent
+WEEK1_DIR = PHASE1_DIR / "week1"
+WEEK2_DIR = PHASE1_DIR / "week2"
+WEEK3_DIR = PHASE1_DIR / "week3"
 
-if str(REPO_ROOT) not in sys.path:
-    sys.path.insert(0, str(REPO_ROOT))
+for path in (REPO_ROOT, PHASE1_DIR):
+    entry = str(path)
+    if entry not in sys.path:
+        sys.path.insert(0, entry)
 
 LOCAL_MAX_CHARS = 24
 LOCAL_KEYWORDS = ("你好", "hello", "hi", "谢谢", "再见")

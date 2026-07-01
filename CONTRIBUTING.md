@@ -6,7 +6,7 @@
 git clone https://github.com/Afra55/ai-app-dev-roadmap.git
 cd ai-app-dev-roadmap
 pip install -e ".[dev]"
-cp week1/.env.example week1/.env   # optional: add DEEPSEEK_API_KEY
+cp phase1/week1/.env.example phase1/week1/.env   # optional: add DEEPSEEK_API_KEY
 ```
 
 ## Checks before PR

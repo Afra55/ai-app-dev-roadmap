@@ -22,17 +22,17 @@ venv.bak/
 Thumbs.db
 
 # Week 2 generated data
-week2/chroma_db/
-week2/uploaded_docs/
+phase1/week2/chroma_db/
+phase1/week2/uploaded_docs/
 
 # Week 3 generated data
-week3/models/
-week3/.venv/
+phase1/week3/models/
+phase1/week3/.venv/
 
 # Week 4 generated data
-week4/.venv/
+phase1/week4/.venv/
 
 # Phase 2 generated data
-projects/direction-a-smart-notes/data/
-projects/direction-b-bank-assistant/backend/data/
-projects/direction-c-enterprise-agent/data/
+phase2/direction-a-smart-notes/data/
+phase2/direction-b-bank-assistant/backend/data/
+phase2/direction-c-enterprise-agent/data/
